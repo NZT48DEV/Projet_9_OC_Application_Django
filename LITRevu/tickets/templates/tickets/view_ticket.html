@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{{ ticket.title }}</h2>
+    <p>{{ ticket.description }}</p>
+
+    {% if ticket.photo %}
+        <img src="{{ ticket.photo.image.url }}" alt="photo du ticket">
+    {% endif %}
+
+    <!-- Formulaire pour supprimer -->
+    <br>
+    <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger" style="margin-top: 20px;">
+        Supprimer le ticket
+    </a>
+
+    <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 20px;">
+        Retour Home
+    </a>
+
+{% endblock content %}

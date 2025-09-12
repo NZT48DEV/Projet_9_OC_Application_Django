@@ -2,12 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from . import forms, models
 from django.shortcuts import get_object_or_404
+from tickets.models import Ticket
 
 @login_required
 def home(request):
     photos = models.Photo.objects.all()
-    tickets = models.App.objects.all()
-    return render(request, 'app/home.html', context={'photos': photos, 'tickets': tickets})
+    tickets = models.Ticket.objects.all()
+    return render(request, 'tickets/home.html', context={'photos': photos, 'tickets': tickets})
 
 @login_required
 def photo_upload(request):
@@ -21,10 +22,10 @@ def photo_upload(request):
             # now we can save
             photo.save()
             return redirect('home')
-    return render(request, 'app/photo_upload.html', context={'form': form})
+    return render(request, 'tickets/photo_upload.html', context={'form': form})
 
 @login_required
-def ticket_create(request):
+def create_ticket(request):
     ticket_form = forms.TicketForm()
     photo_form = forms.PhotoForm()
     if request.method == 'POST':
@@ -43,9 +44,21 @@ def ticket_create(request):
         'ticket_form': ticket_form,
         'photo_form': photo_form,
     }
-    return render(request, 'app/create_ticket.html', context=context)
+    return render(request, 'tickets/create_ticket.html', context=context)
 
 @login_required
 def view_ticket(request, ticket_id):
-    ticket = get_object_or_404(models.App, id=ticket_id)
-    return render(request, 'app/view_ticket.html', {'ticket': ticket})
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    return render(request, 'tickets/view_ticket.html', {'ticket': ticket})
+
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+
+    if request.method == "POST":
+        ticket.delete()
+        return redirect('home')
+
+    return render(request,
+                  'tickets/delete_ticket.html', 
+                  {'ticket': ticket})

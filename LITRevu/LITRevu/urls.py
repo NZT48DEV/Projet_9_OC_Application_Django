@@ -30,8 +30,9 @@ urlpatterns = [
     path('signup/', authentication.views.signup_page, name='signup'),
     path('home/', tickets.views.home, name='home'),
     path('photo/upload/', tickets.views.photo_upload, name='photo_upload'),
-    path('ticket/create', tickets.views.ticket_create, name='ticket_create'),
+    path('ticket/create', tickets.views.create_ticket, name='create_ticket'),
     path('ticket/<int:ticket_id>', tickets.views.view_ticket, name='view_ticket'),
+    path('ticket/<int:ticket_id>/delete', tickets.views.delete_ticket, name='delete_ticket'),
 ]
 
 if settings.DEBUG:

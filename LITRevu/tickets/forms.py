@@ -9,4 +9,4 @@ class PhotoForm(forms.ModelForm):
 class TicketForm(forms.ModelForm):
     class Meta:
         model = models.Ticket
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'type']
