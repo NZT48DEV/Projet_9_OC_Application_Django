@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Écrire une critique</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {{ form.title.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.note.label_tag }}
+            {{ form.note }}
+            {{ form.note.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.commentary.label_tag }}
+            {{ form.commentary }}
+            {{ form.commentary.errors }}
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

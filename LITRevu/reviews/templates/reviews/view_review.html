@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Titre : {{ review.title }}</h2>
+    <p>Note : {{ review.note }}</p>
+    <p>Commentaire : {{ review.commentary }}</p>
+
+    <!-- Formulaire pour supprimer -->
+    <br>
+    <a href="{% url 'delete_review' review.id %}" class="btn btn-danger" style="margin-top: 20px;">
+        Supprimer la critique
+    </a>
+
+    <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 20px;">
+        Retour Home
+    </a>
+
+{% endblock content %}

@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    
-    <h2>Ticket</h2>
     <a href="{% url 'create_ticket' %}" class="btn btn-secondary">Créer un ticket</a>
+    <a href="{% url 'create_review' %}" class="btn btn-secondary">Créer une critique</a>
     {% for ticket in tickets %}
         <a href="{% url 'view_ticket' ticket.id %}">
             <h4>Ticket : {{ ticket.title }}</h4>
             <img src="{{ ticket.photo.image.url }}" alt="">
         </a>
     {% endfor %}
-    <!-- {% for photo in photos %}
-        <img src="{{ photo.image.url}}" alt="" srcset="">
-    {% endfor %} -->
+    {% for review in reviews %}
+        <a href="{% url 'view_review' review.id %}">
+            <h4>Review : {{ review.title }}</h4>
+        </a>
+    {% endfor %}
+
 {% endblock content %}
