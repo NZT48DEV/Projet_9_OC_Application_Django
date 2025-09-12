@@ -1,10 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Écrire un ticket</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Créer un ticket</h2>
+
     <form method="post" enctype="multipart/form-data">
-        {{ ticket_form.as_p }}
-        {{ photo_form.as_p }}
         {% csrf_token %}
-        <button type="submit" >Publier</button>
+
+        <div class="mb-3">
+            {{ ticket_form.title.label_tag }}
+            {{ ticket_form.title }}
+        </div>
+
+        <div class="mb-3">
+            {{ ticket_form.description.label_tag }}
+            {{ ticket_form.description }}
+        </div>
+
+        <div class="mb-3 col-1">
+            {{ ticket_form.type.label_tag }}
+            {{ ticket_form.type }}
+        </div>
+
+        <div class="mb-3 col-3">
+            {{ photo_form.image.label_tag }}
+            {{ photo_form.image }}
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
     </form>
+</div>
 {% endblock content %}
