@@ -8,5 +8,5 @@ class PhotoForm(forms.ModelForm):
 
 class TicketForm(forms.ModelForm):
     class Meta:
-        model = models.App
+        model = models.Ticket
         fields = ['title', 'description']

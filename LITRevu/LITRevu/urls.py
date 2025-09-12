@@ -21,17 +21,17 @@ from django.urls import path
 from authentication.views import CustomLoginView
 
 import authentication.views
-import app.views
+import tickets.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', CustomLoginView.as_view(), name='welcome'),
     path('logout/', authentication.views.logout_user, name='logout'),
     path('signup/', authentication.views.signup_page, name='signup'),
-    path('home/', app.views.home, name='home'),
-    path('photo/upload/', app.views.photo_upload, name='photo_upload'),
-    path('ticket/create', app.views.ticket_create, name='ticket_create'),
-    path('ticket/<int:ticket_id>', app.views.view_ticket, name='view_ticket'),
+    path('home/', tickets.views.home, name='home'),
+    path('photo/upload/', tickets.views.photo_upload, name='photo_upload'),
+    path('ticket/create', tickets.views.ticket_create, name='ticket_create'),
+    path('ticket/<int:ticket_id>', tickets.views.view_ticket, name='view_ticket'),
 ]
 
 if settings.DEBUG:
