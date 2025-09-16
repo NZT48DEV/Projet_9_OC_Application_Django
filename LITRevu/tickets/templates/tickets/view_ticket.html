@@ -3,8 +3,8 @@
     <h2>{{ ticket.title }}</h2>
     <p>{{ ticket.description }}</p>
 
-    {% if ticket.photo %}
-        <img src="{{ ticket.photo.image.url }}" alt="photo du ticket">
+    {% if ticket.image %}
+        <img src="{{ ticket.image.image.url }}" alt="image du ticket">
     {% endif %}
 
     <!-- Formulaire pour supprimer -->

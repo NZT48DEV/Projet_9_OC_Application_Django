@@ -1,10 +1,13 @@
 from django import forms
-from .models import Ticket, Photo
+from .models import Ticket, Image
 
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ['title', 'description', 'type']
+        labels = {
+            'title': 'Titre',
+        }
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Entrez le titre du ticket',
@@ -18,9 +21,9 @@ class TicketForm(forms.ModelForm):
             'type': forms.Select(attrs={'class': 'form-select'}),
         }
 
-class PhotoForm(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
-        model = Photo
+        model = Image
         fields = ['image']
         widgets = {
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'})

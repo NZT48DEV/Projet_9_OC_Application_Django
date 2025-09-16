@@ -2,19 +2,27 @@ from django import forms
 from .models import Review
 
 class ReviewForm(forms.ModelForm):
+    rating = forms.ChoiceField(
+        choices=[(i, str(i)) for i in range(6)],
+        widget=forms.RadioSelect,
+        required=True,
+        label="Note"
+    )
+
     class Meta:
         model = Review
-        fields = ['title', 'note', 'commentary']
+        fields = ['headline', 'rating', 'body']
+        labels = {
+            'headline': 'Titre',
+            'body': 'Commentaire',
+        }
         widgets = {
-            'title': forms.TextInput(attrs={
+            'headline': forms.TextInput(attrs={
                 'placeholder': 'Titre de la critique',
                 'class': 'form-control',
                 'required': True
             }),
-            'note': forms.RadioSelect(choices=Review.NOTE_CHOICES, attrs={
-                'required': True
-            }),
-            'commentary': forms.Textarea(attrs={
+            'body': forms.Textarea(attrs={
                 'placeholder': 'Écrivez votre commentaire...',
                 'class': 'form-control',
                 'rows': 5,

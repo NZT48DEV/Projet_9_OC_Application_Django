@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentication',
-    'tickets',
-    'reviews',
+    'authentication.apps.AuthenticationConfig',
+    'tickets.apps.TicketsConfig',
+    'reviews.apps.ReviewsConfig',
+    'userfollows.apps.UserfollowsConfig',
     'LITRevu',
 ]
 

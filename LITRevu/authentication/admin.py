@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
 
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     # colonnes affichées dans la liste
-    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_staff')
-    list_filter = ('role', 'is_staff', 'is_superuser', 'is_active')
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active')
 
     # champs de recherche
     search_fields = ('username', 'email', 'first_name', 'last_name')
@@ -17,7 +18,7 @@ class CustomUserAdmin(UserAdmin):
     # organisation des champs dans les formulaires d’édition
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Infos personnelles', {'fields': ('first_name', 'last_name', 'email', 'profile_photo', 'role')}),
+        ('Infos personnelles', {'fields': ('first_name', 'last_name', 'email', 'profile_photo')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Dates importantes', {'fields': ('last_login', 'date_joined')}),
     )
@@ -26,6 +27,10 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'profile_photo', 'role', 'is_staff', 'is_active'),
+            'fields': (
+                'username', 'email', 'password1', 'password2',
+                'first_name', 'last_name', 'profile_photo',
+                'is_staff', 'is_active'
+            ),
         }),
     )
