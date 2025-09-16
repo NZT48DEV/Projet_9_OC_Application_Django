@@ -7,14 +7,42 @@
         <img src="{{ ticket.image.image.url }}" alt="image du ticket">
     {% endif %}
 
-    <!-- Formulaire pour supprimer -->
+    <hr>
+
+    {% if review %}
+        <h3>Votre critique</h3>
+        <h4>{{ review.headline }}</h4>
+        <p><strong>Note :</strong> {{ review.rating }}/5</p>
+        <p>{{ review.body }}</p>
+        <p><em>par {{ review.user.username }} le {{ review.time_created }}</em></p>
+
+        <!-- Boutons si critique existe -->
+        <a href="{% url 'update_review' review.id %}" class="btn btn-warning mt-3">
+            Modifier ma critique
+        </a>
+        <a href="{% url 'delete_review' review.id %}" class="btn btn-danger mt-3">
+            Supprimer ma critique
+        </a>
+
+    {% else %}
+        <!-- Bouton si aucune critique de l’utilisateur -->
+        <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
+            Répondre par une critique
+        </a>
+    {% endif %}
+
+    <hr>
+
+    {% if request.user == ticket.user %}
+        <!-- Si le ticket appartient à l’utilisateur -->
+        <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning mt-3">
+            Modifier le ticket
+        </a>
+        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger mt-3">
+            Supprimer le ticket
+        </a>
+    {% endif %}
+
     <br>
-    <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger" style="margin-top: 20px;">
-        Supprimer le ticket
-    </a>
-
-    <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 20px;">
-        Retour Home
-    </a>
-
-{% endblock content %}
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Retour Home</a>
+{% endblock %}

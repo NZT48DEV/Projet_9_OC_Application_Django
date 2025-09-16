@@ -5,27 +5,7 @@
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <div class="mb-3">
-            {{ ticket_form.title.label_tag }}
-            {{ ticket_form.title }}
-        </div>
-
-        <div class="mb-3">
-            {{ ticket_form.description.label_tag }}
-            {{ ticket_form.description }}
-        </div>
-
-        <div class="mb-3 col-1">
-            {{ ticket_form.type.label_tag }}
-            {{ ticket_form.type }}
-        </div>
-
-        <div class="mb-3 col-3">
-            {{ image_form.image.label_tag }}
-            {{ image_form.image }}
-        </div>
-
+        {% include "tickets/partials/_ticket_form.html" %}
         <div class="text-end">
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </div>

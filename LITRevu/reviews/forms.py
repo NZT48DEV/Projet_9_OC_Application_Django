@@ -23,7 +23,7 @@ class ReviewForm(forms.ModelForm):
                 'required': True
             }),
             'body': forms.Textarea(attrs={
-                'placeholder': 'Écrivez votre commentaire...',
+                'placeholder': 'Écrivez votre critique...',
                 'class': 'form-control',
                 'rows': 5,
                 'required': True

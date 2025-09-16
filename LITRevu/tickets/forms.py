@@ -10,11 +10,11 @@ class TicketForm(forms.ModelForm):
         }
         widgets = {
             'title': forms.TextInput(attrs={
-                'placeholder': 'Entrez le titre du ticket',
+                'placeholder': 'Titre du Livre/Article',
                 'class': 'form-control'
             }),
             'description': forms.Textarea(attrs={
-                'placeholder': 'Décrivez votre ressource...',
+                'placeholder': 'Décrivez votre Livre/Article...',
                 'class': 'form-control',
                 'rows': 5
             }),
@@ -26,5 +26,5 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image']
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control'})
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
         }

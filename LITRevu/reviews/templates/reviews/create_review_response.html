@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Créer une critique</h2>
+
+    <!-- Bandeau "en réponse à" -->
+    <div class="border p-3 mb-4">
+        <p class="mb-2"><em>Vous êtes en train de poster en réponse à</em></p>
+        
+        <!-- Bloc ticket -->
+        <div class="card p-3">
+            <div class="d-flex justify-content-between">
+                <p><strong>{{ ticket.user.username }}</strong> a demandé une critique</p>
+                <small class="text-muted">{{ ticket.time_created }}</small>
+            </div>
+            
+            <h4>{{ ticket.title }}</h4>
+            <p>{{ ticket.description }}</p>
+            
+            {% if ticket.image %}
+                <img src="{{ ticket.image.image.url }}" class="img-thumbnail" style="max-width:200px;">
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bloc critique -->
+    <form method="post">
+        {% csrf_token %}
+        <fieldset class="border p-3">
+            <legend class="w-auto">Critique</legend>
+
+            <div class="mb-3">
+                {{ review_form.headline.label_tag }}
+                {{ review_form.headline }}
+            </div>
+
+            <div class="mb-3">
+                {{ review_form.rating.label_tag }}
+                <div>
+                    {% for radio in review_form.rating %}
+                        <div class="form-check form-check-inline">
+                            {{ radio.tag }}
+                            <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                {{ radio.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ review_form.body.label_tag }}
+                {{ review_form.body }}
+            </div>
+            
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">Envoyer</button>
+                <a href="{% url 'view_ticket' ticket.id %}" class="btn btn-secondary">Annuler</a>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

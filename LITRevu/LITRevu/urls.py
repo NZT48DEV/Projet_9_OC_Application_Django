@@ -35,10 +35,13 @@ urlpatterns = [
     path('ticket/create', tickets.views.create_ticket, name='create_ticket'),
     path('ticket/<int:ticket_id>', tickets.views.view_ticket, name='view_ticket'),
     path('ticket/<int:ticket_id>/delete', tickets.views.delete_ticket, name='delete_ticket'),
-    path('review/create/', reviews.views.create_review, name='create_review'),
-    path('review/create/<int:ticket_id>/', reviews.views.create_review, name='create_review_for_ticket'),
+    path("review/create/", reviews.views.create_review_with_ticket, name="create_review_with_ticket"),
+    path("ticket/<int:ticket_id>/review/", reviews.views.create_review_response, name="create_review_response"),
     path('review/<int:review_id>', reviews.views.view_review, name='view_review'),
     path('review/<int:review_id>/delete', reviews.views.delete_review, name='delete_review'),
+    path('ticket/<int:ticket_id>/update/', tickets.views.update_ticket, name='update_ticket'),
+    path('review/<int:review_id>/update/', reviews.views.update_review, name='update_review'),
+
 ]
 
 if settings.DEBUG:

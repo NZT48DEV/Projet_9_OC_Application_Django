@@ -4,11 +4,19 @@
     <p>Note : {{ review.rating }}</p>
     <p>Commentaire : {{ review.body }}</p>
 
-    <!-- Formulaire pour supprimer -->
+    <!-- Boutons -->
     <br>
-    <a href="{% url 'delete_review' review.id %}" class="btn btn-danger" style="margin-top: 20px;">
-        Supprimer la critique
-    </a>
+    {% if request.user == review.user %}
+        <!-- Bouton Modifier -->
+        <a href="{% url 'update_review' review.id %}" class="btn btn-warning" style="margin-top: 20px;">
+            Modifier la critique
+        </a>
+
+        <!-- Bouton Supprimer -->
+        <a href="{% url 'delete_review' review.id %}" class="btn btn-danger" style="margin-top: 20px;">
+            Supprimer la critique
+        </a>
+    {% endif %}
 
     <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 20px;">
         Retour Home

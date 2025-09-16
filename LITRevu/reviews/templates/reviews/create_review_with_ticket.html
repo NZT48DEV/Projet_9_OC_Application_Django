@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Créer une critique</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ ticket_form.non_field_errors }}
+        {{ review_form.non_field_errors }}
+
+        <!-- Formulaire du ticket -->
+        <h3>Livre/Article</h3>
+        {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form %}
+
+        <hr>
+
+        <!-- Formulaire de la review -->
+        <h3>Critique</h3>
+        {% include "reviews/partials/_review_form.html" with form=review_form    %}
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

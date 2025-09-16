@@ -1,39 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Écrire une critique</h2>
+    <h2>Modifier la critique : {{ review.headline }}</h2>
 
     <form method="post">
         {% csrf_token %}
-        {{ form.non_field_errors }}
 
         <div class="mb-3">
             {{ form.headline.label_tag }}
             {{ form.headline }}
-            {{ form.headline.errors }}
         </div>
 
         <div class="mb-3">
-            <label class="form-label">{{ form.rating.label }}</label>
+            {{ form.rating.label_tag }}
             <div>
                 {% for radio in form.rating %}
                     <div class="form-check form-check-inline">
                         {{ radio.tag }}
-                        <label class="form-check-label">{{ radio.choice_label }}</label>
+                        <label class="form-check-label" for="{{ radio.id_for_label }}">
+                            {{ radio.choice_label }}
+                        </label>
                     </div>
                 {% endfor %}
             </div>
-            {{ form.rating.errors }}
         </div>
 
         <div class="mb-3">
             {{ form.body.label_tag }}
             {{ form.body }}
-            {{ form.body.errors }}
         </div>
 
         <div class="text-end">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{% url 'view_review' review.id %}" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>

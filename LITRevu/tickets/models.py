@@ -24,16 +24,22 @@ class Image(models.Model):
 
 class Ticket(models.Model):
     TYPE_CHOICES = [
-        ('BOOK', 'Livre'),
-        ('ARTICLE', 'Article'),
-    ]
-
+    ('', 'Choisissez un type'),  # valeur vide affichée en premier
+    ('BOOK', 'Livre'),
+    ('ARTICLE', 'Article'),
+]
+    
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=2048, blank=True)
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='BOOK')
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
+        blank=False
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return f'{self.title} ({self.get_type_display()})'

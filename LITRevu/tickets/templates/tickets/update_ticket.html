@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Modifier le ticket</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% include "tickets/partials/_ticket_form.html" with form=ticket_form %}
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{% url 'view_ticket' ticket.pk %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

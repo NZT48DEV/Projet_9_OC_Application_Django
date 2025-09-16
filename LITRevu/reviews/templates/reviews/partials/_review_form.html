@@ -1,0 +1,24 @@
+<div class="mb-3">
+    {{ review_form.headline.label_tag }}
+    {{ review_form.headline }}
+    {{ review_form.headline.errors }}
+</div>
+
+<div class="mb-3">
+    <label class="form-label">{{ review_form.rating.label }}</label>
+    <div>
+        {% for radio in review_form.rating %}
+            <div class="form-check form-check-inline">
+                {{ radio.tag }}
+                <label class="form-check-label">{{ radio.choice_label }}</label>
+            </div>
+        {% endfor %}
+    </div>
+    {{ review_form.rating.errors }}
+</div>
+
+<div class="mb-3">
+    {{ review_form.body.label_tag }}
+    {{ review_form.body }}
+    {{ review_form.body.errors }}
+</div>
