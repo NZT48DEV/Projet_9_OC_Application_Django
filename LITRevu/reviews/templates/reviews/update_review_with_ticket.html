@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Modifier le ticket et la critique</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <h3>Livre/Article</h3>
+        {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form ticket=ticket %}
+
+        <hr>
+
+        <h3>Critique</h3>
+        {% include "reviews/partials/_review_form.html" with review_form=review_form %}
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

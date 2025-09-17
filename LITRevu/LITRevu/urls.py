@@ -24,6 +24,7 @@ import authentication.views
 import tickets.views
 import reviews.views
 import LITRevu.views
+import posts.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,7 +42,9 @@ urlpatterns = [
     path('review/<int:review_id>/delete', reviews.views.delete_review, name='delete_review'),
     path('ticket/<int:ticket_id>/update/', tickets.views.update_ticket, name='update_ticket'),
     path('review/<int:review_id>/update/', reviews.views.update_review, name='update_review'),
-
+    path("posts/", posts.views.user_posts, name="user_posts"),
+    path("review_with_ticket/<int:review_id>/update/", reviews.views.update_review_with_ticket, name="update_review_with_ticket"),
+    path("review_with_ticket/<int:review_id>/delete/", reviews.views.delete_review_with_ticket, name="delete_review_with_ticket"),
 ]
 
 if settings.DEBUG:

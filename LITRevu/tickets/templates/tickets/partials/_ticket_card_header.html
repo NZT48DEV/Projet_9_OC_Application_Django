@@ -1,0 +1,14 @@
+{# tickets/partials/_ticket_card_header.html #}
+
+<div class="d-flex justify-content-between">
+    <p>
+        <em>
+            {% if ticket.user == request.user %}
+                Vous avez publié un ticket
+            {% else %}
+                {{ ticket.user.username }} a demandé une critique
+            {% endif %}
+        </em>
+    </p>
+    <small class="text-muted">{{ ticket.time_created|date:"d M Y H:i" }}</small>
+</div>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Vos posts</h2>
+
+    {% if posts %}
+        {% for post in posts %}
+            {% if post|classname == "Review" %}
+                {% include "reviews/partials/_review_card.html" with review=post %}
+            {% elif post|classname == "Ticket" %}
+                {% include "tickets/partials/_ticket_card.html" with ticket=post %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="text-center mb-4">Vous n’avez encore rien posté.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from . import forms, models
@@ -50,24 +51,35 @@ def create_ticket(request):
 @login_required
 def view_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    user_review = Review.objects.filter(ticket=ticket, user=request.user).first()
+
+    # Toutes les critiques liées à ce ticket
+    reviews = Review.objects.filter(ticket=ticket)
+
+    # La critique spécifique de l'utilisateur connecté (s'il en a fait une)
+    user_review = reviews.filter(user=request.user).first()
+
     return render(request, "tickets/view_ticket.html", {
         "ticket": ticket,
-        "review": user_review,  # critique de l’utilisateur connecté
+        "reviews": reviews,        
+        "user_review": user_review,  
+        "hide_ticket": True, 
     })
 
 
 @login_required
 def delete_ticket(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == "POST":
         ticket.delete()
-        return redirect('home')
+        messages.success(request, "✅ Votre ticket a bien été supprimé.")
+        return redirect('user_posts')  # ou 'home' si tu préfères
 
-    return render(request,
-                  'tickets/delete_ticket.html', 
-                  {'ticket': ticket})
+    return render(request, 'tickets/delete_ticket.html', {
+        "ticket": ticket,
+        "review": None,
+        "read_only": True
+    })
 
 
 def update_ticket(request, ticket_id):
@@ -94,7 +106,10 @@ def update_ticket(request, ticket_id):
         image_form = ImageForm(instance=ticket.image)
 
     return render(request, 'tickets/update_ticket.html', {
-        'ticket_form': ticket_form,
-        'image_form': image_form,
-        'ticket': ticket,   # utile si tu veux afficher titre ou id dans le template
-    })
+    'ticket_form': ticket_form,
+    'image_form': image_form,
+    'ticket': ticket,
+    "review": None,
+    "read_only": False
+})
+

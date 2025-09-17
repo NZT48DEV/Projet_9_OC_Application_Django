@@ -1,0 +1,31 @@
+{% load custom_filters %}
+
+<div class="card p-3">
+    <div class="d-flex justify-content-between">
+        <p>
+            {% if ticket.user == request.user %}
+                <em>Vous avez publié un ticket</em>
+            {% else %}
+                <strong>{{ ticket.user.username }}</strong> a demandé une critique
+            {% endif %}
+        </p>
+        <small class="text-muted">{{ ticket.time_created|format_date }}</small>
+    </div>
+
+    <h4>{{ ticket.title }}</h4>
+    <p>{{ ticket.description }}</p>
+
+    {% if ticket.image %}
+        <img src="{{ ticket.image.image.url }}" class="img-thumbnail" style="max-width:200px;">
+    {% endif %}
+
+    {% if not review and not read_only %}
+        <!-- Boutons affichés uniquement si :
+             - ce ticket n'est pas lié à une review
+             - ET qu'on n'est pas en mode read_only -->
+        <div class="d-flex justify-content-end mt-2">
+            <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning btn-sm me-2">Modifier</a>
+            <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+        </div>
+    {% endif %}
+</div>

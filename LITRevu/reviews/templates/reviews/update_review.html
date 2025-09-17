@@ -1,39 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Modifier la critique : {{ review.headline }}</h2>
+    <h2 class="text-center mb-4">Modifier votre critique</h2>
 
+    {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket message="Vous êtes en train de modifier votre critique en réponse à" %}
+
+    <!-- Formulaire critique -->
     <form method="post">
         {% csrf_token %}
+        <fieldset class="border p-3">
+            <legend class="w-auto">Critique</legend>
 
-        <div class="mb-3">
-            {{ form.headline.label_tag }}
-            {{ form.headline }}
-        </div>
-
-        <div class="mb-3">
-            {{ form.rating.label_tag }}
-            <div>
-                {% for radio in form.rating %}
-                    <div class="form-check form-check-inline">
-                        {{ radio.tag }}
-                        <label class="form-check-label" for="{{ radio.id_for_label }}">
-                            {{ radio.choice_label }}
-                        </label>
-                    </div>
-                {% endfor %}
+            <div class="mb-3">
+                {{ form.headline.label_tag }}
+                {{ form.headline }}
             </div>
-        </div>
 
-        <div class="mb-3">
-            {{ form.body.label_tag }}
-            {{ form.body }}
-        </div>
+            <div class="mb-3">
+                {{ form.rating.label_tag }}
+                <div>
+                    {% for radio in form.rating %}
+                        <div class="form-check form-check-inline">
+                            {{ radio.tag }}
+                            <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                {{ radio.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
 
-        <div class="text-end">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{% url 'view_review' review.id %}" class="btn btn-secondary">Annuler</a>
-        </div>
+            <div class="mb-3">
+                {{ form.body.label_tag }}
+                {{ form.body }}
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+                <a href="{% url 'view_review' review.id %}" class="btn btn-secondary">Annuler</a>
+            </div>
+        </fieldset>
     </form>
 </div>
 {% endblock content %}

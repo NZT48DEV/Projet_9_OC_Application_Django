@@ -1,0 +1,60 @@
+{% load custom_filters %}
+
+<div class="card mb-3 p-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between">
+        <p>
+            {% if review.user == request.user %}
+                <em>Vous avez publié une critique</em>
+            {% else %}
+                <strong>{{ review.user.username }}</strong> a publié une critique
+            {% endif %}
+        </p>
+        <small class="text-muted">{{ review.time_created|format_date }}</small>
+    </div>
+
+    <!-- Titre + étoiles -->
+    <h5>
+        {{ review.headline }}
+        {% for i in "12345" %}
+            {% if forloop.counter <= review.rating %}
+                <span style="color: gold;">★</span>
+            {% else %}
+                <span style="color: lightgray;">☆</span>
+            {% endif %}
+        {% endfor %}
+    </h5>
+
+    <!-- Corps -->
+    <p>{{ review.body }}</p>
+
+    {% if not hide_ticket %}
+        <!-- Ticket associé (sauf si on masque volontairement) -->
+        <div class="card bg-light p-3 mb-3">
+            {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket review=True read_only=True %}
+        </div>
+    {% endif %}
+
+    <!-- Boutons (uniquement si critique appartient à l’utilisateur connecté ET pas en read_only) -->
+    {% if not read_only and review.user == request.user %}
+        <div class="d-flex justify-content-end">
+            {% if review.ticket.user == request.user %}
+                <!-- Cas où l’utilisateur possède le ticket ET la critique -->
+                <a href="{% url 'update_review_with_ticket' review.id %}" class="btn btn-warning btn-sm me-2">
+                    Modifier
+                </a>
+                <a href="{% url 'delete_review_with_ticket' review.id %}" class="btn btn-danger btn-sm">
+                    Supprimer
+                </a>
+            {% else %}
+                <!-- Cas où le ticket appartient à quelqu’un d’autre -->
+                <a href="{% url 'update_review' review.id %}" class="btn btn-warning btn-sm me-2">
+                    Modifier
+                </a>
+                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger btn-sm">
+                    Supprimer
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

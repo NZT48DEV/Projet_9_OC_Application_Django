@@ -1,48 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>{{ ticket.title }}</h2>
-    <p>{{ ticket.description }}</p>
+<div class="container">
+    <h3 class="mb-3">{{ ticket.get_type_display }}</h3>
 
-    {% if ticket.image %}
-        <img src="{{ ticket.image.image.url }}" alt="image du ticket">
+    <div class="card mb-4 p-3">
+        <!-- Header (auteur + date) -->
+        <div class="d-flex justify-content-between">
+            <p>
+                {% if request.user == ticket.user %}
+                    <em>Vous avez publié ce ticket</em>
+                {% else %}
+                    <strong>{{ ticket.user.username }}</strong> a publié ce ticket
+                {% endif %}
+            </p>
+            <small class="text-muted">{{ ticket.time_created|date:"H:i, d M Y" }}</small>
+        </div>
+
+        <!-- Contenu -->
+        <h2 class="card-title">{{ ticket.title }}</h2>
+        <p class="card-text">{{ ticket.description }}</p>
+
+        {% if ticket.image %}
+            <img src="{{ ticket.image.image.url }}" alt="image du ticket" class="img-fluid rounded mb-3" style="max-width:250px;">
+        {% endif %}
+
+        <!-- Boutons si c'est l'utilisateur -->
+        {% if request.user == ticket.user %}
+            <div class="d-flex">
+                <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning me-2">
+                    Modifier le ticket
+                </a>
+                <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger">
+                    Supprimer le ticket
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <h3 class="mb-3">Critique(s)</h3>
+
+    {% if reviews %}
+        {% for review in reviews %}
+            {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Aucune critique pour le moment.</p>
     {% endif %}
 
-    <hr>
-
-    {% if review %}
-        <h3>Votre critique</h3>
-        <h4>{{ review.headline }}</h4>
-        <p><strong>Note :</strong> {{ review.rating }}/5</p>
-        <p>{{ review.body }}</p>
-        <p><em>par {{ review.user.username }} le {{ review.time_created }}</em></p>
-
-        <!-- Boutons si critique existe -->
-        <a href="{% url 'update_review' review.id %}" class="btn btn-warning mt-3">
-            Modifier ma critique
-        </a>
-        <a href="{% url 'delete_review' review.id %}" class="btn btn-danger mt-3">
-            Supprimer ma critique
-        </a>
-
-    {% else %}
-        <!-- Bouton si aucune critique de l’utilisateur -->
+    {% if not user_review %}
         <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
             Répondre par une critique
         </a>
     {% endif %}
 
-    <hr>
-
-    {% if request.user == ticket.user %}
-        <!-- Si le ticket appartient à l’utilisateur -->
-        <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning mt-3">
-            Modifier le ticket
-        </a>
-        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger mt-3">
-            Supprimer le ticket
-        </a>
-    {% endif %}
-
-    <br>
     <a href="{% url 'home' %}" class="btn btn-primary mt-3">Retour Home</a>
+</div>
 {% endblock %}

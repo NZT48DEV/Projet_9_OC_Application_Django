@@ -1,0 +1,15 @@
+<div class="card p-2 mt-3 bg-light">
+    <div class="d-flex justify-content-between">
+        <p class="mb-1"><strong>Ticket - {{ ticket.user.username }}</strong></p>
+        <small class="text-muted">{{ ticket.time_created|date:"H:i, d F Y" }}</small>
+    </div>
+
+    <h6 class="mb-1">{{ ticket.title }}</h6>
+    <p class="mb-2">{{ ticket.description }}</p>
+
+    {% if ticket.image %}
+        <img src="{{ ticket.image.image.url }}" 
+             class="img-thumbnail" 
+             style="max-width:120px; height:auto;">
+    {% endif %}
+</div>

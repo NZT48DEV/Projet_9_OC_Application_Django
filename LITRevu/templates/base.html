@@ -38,17 +38,37 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Flux</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Posts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'user_posts' %}">Posts</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Abonnements</a></li>
                     <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}">Se déconnecter</a></li>
                 </ul>
                 </div>
                 {% endif %}
             </div>
-
             </div>
         </div>
     </nav>
+
+    <!-- Zone des toasts -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-10 end-0 p-3">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="toast align-items-center text-bg-success border-0 mb-2"
+                role="alert" aria-live="assertive" aria-atomic="true"
+                data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Fermer"></button>
+            </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
 
     <!-- Contenu principal avec 2 colonnes -->
     <main class="container mt-5">
@@ -69,6 +89,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'LITRevu/js/toasts.js' %}"></script>
     <script src="{% static 'tickets/js/image_preview.js' %}"></script>
+    
+
+
 </body>
 </html>

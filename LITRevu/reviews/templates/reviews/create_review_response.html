@@ -4,25 +4,8 @@
 
     <h2 class="text-center mb-4">Créer une critique</h2>
 
-    <!-- Bandeau "en réponse à" -->
-    <div class="border p-3 mb-4">
-        <p class="mb-2"><em>Vous êtes en train de poster en réponse à</em></p>
-        
-        <!-- Bloc ticket -->
-        <div class="card p-3">
-            <div class="d-flex justify-content-between">
-                <p><strong>{{ ticket.user.username }}</strong> a demandé une critique</p>
-                <small class="text-muted">{{ ticket.time_created }}</small>
-            </div>
-            
-            <h4>{{ ticket.title }}</h4>
-            <p>{{ ticket.description }}</p>
-            
-            {% if ticket.image %}
-                <img src="{{ ticket.image.image.url }}" class="img-thumbnail" style="max-width:200px;">
-            {% endif %}
-        </div>
-    </div>
+    {% include "tickets/partials/_ticket_card.html" with ticket=ticket message="Vous êtes en train de poster en réponse à" %}
+
 
     <!-- Bloc critique -->
     <form method="post">
