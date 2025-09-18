@@ -38,23 +38,13 @@
     <!-- Boutons (uniquement si critique appartient à l’utilisateur connecté ET pas en read_only) -->
     {% if not read_only and review.user == request.user %}
         <div class="d-flex justify-content-end">
-            {% if review.ticket.user == request.user %}
-                <!-- Cas où l’utilisateur possède le ticket ET la critique -->
-                <a href="{% url 'update_review_with_ticket' review.id %}" class="btn btn-warning btn-sm me-2">
-                    Modifier
-                </a>
-                <a href="{% url 'delete_review_with_ticket' review.id %}" class="btn btn-danger btn-sm">
-                    Supprimer
-                </a>
-            {% else %}
                 <!-- Cas où le ticket appartient à quelqu’un d’autre -->
                 <a href="{% url 'update_review' review.id %}" class="btn btn-warning btn-sm me-2">
-                    Modifier
+                    Modifier la critique
                 </a>
                 <a href="{% url 'delete_review' review.id %}" class="btn btn-danger btn-sm">
-                    Supprimer
+                    Supprimer la critique
                 </a>
-            {% endif %}
         </div>
     {% endif %}
 </div>

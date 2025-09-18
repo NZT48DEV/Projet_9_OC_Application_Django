@@ -40,6 +40,7 @@ def create_ticket(request):
             ticket.image = image
             ticket.user = request.user  # ⚠ pas ticket.author, ton champ s'appelle user
             ticket.save()
+            messages.success(request, "✅ Votre ticket a bien été créé.")
             return redirect('home')
     context = {
         'ticket_form': ticket_form,
@@ -99,7 +100,7 @@ def update_ticket(request, ticket_id):
             updated_ticket = ticket_form.save(commit=False)
             updated_ticket.image = image
             updated_ticket.save()
-
+            messages.success(request, "✅ Votre ticket a bien été modifié.")
             return redirect('view_ticket', ticket_id=updated_ticket.pk)  # <-- pk sûr
     else:
         ticket_form = TicketForm(instance=ticket)

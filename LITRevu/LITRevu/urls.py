@@ -23,28 +23,31 @@ from authentication.views import CustomLoginView
 import authentication.views
 import tickets.views
 import reviews.views
-import LITRevu.views
+import flux.views
 import posts.views
+import userfollows.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', CustomLoginView.as_view(), name='welcome'),
     path('logout/', authentication.views.logout_user, name='logout'),
     path('signup/', authentication.views.signup_page, name='signup'),
-    path('home/', LITRevu.views.home, name='home'),
+    path('home/', flux.views.home, name='home'),
     path('image/upload/', tickets.views.image_upload, name='image_upload'),
     path('ticket/create', tickets.views.create_ticket, name='create_ticket'),
     path('ticket/<int:ticket_id>', tickets.views.view_ticket, name='view_ticket'),
     path('ticket/<int:ticket_id>/delete', tickets.views.delete_ticket, name='delete_ticket'),
+    path('ticket/<int:ticket_id>/update/', tickets.views.update_ticket, name='update_ticket'),
     path("review/create/", reviews.views.create_review_with_ticket, name="create_review_with_ticket"),
     path("ticket/<int:ticket_id>/review/", reviews.views.create_review_response, name="create_review_response"),
     path('review/<int:review_id>', reviews.views.view_review, name='view_review'),
     path('review/<int:review_id>/delete', reviews.views.delete_review, name='delete_review'),
-    path('ticket/<int:ticket_id>/update/', tickets.views.update_ticket, name='update_ticket'),
     path('review/<int:review_id>/update/', reviews.views.update_review, name='update_review'),
     path("posts/", posts.views.user_posts, name="user_posts"),
     path("review_with_ticket/<int:review_id>/update/", reviews.views.update_review_with_ticket, name="update_review_with_ticket"),
     path("review_with_ticket/<int:review_id>/delete/", reviews.views.delete_review_with_ticket, name="delete_review_with_ticket"),
+    path("subscriptions/", userfollows.views.subscriptions, name="subscriptions"),
+    path("unfollow/<int:user_id>/", userfollows.views.unfollow, name="unfollow"),
 ]
 
 if settings.DEBUG:

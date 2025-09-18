@@ -14,8 +14,24 @@
         <h3>Critique</h3>
         {% include "reviews/partials/_review_form.html" with review_form=review_form %}
 
-        <div class="text-end">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <!-- Bloc boutons alignés à droite, empilés verticalement -->
+        <div class="d-flex flex-column align-items-end mt-4 gap-2">
+            <!-- Bouton enregistrer -->
+            <button type="submit" class="btn btn-success w-auto">
+                Enregistrer
+            </button>
+
+            <!-- Bouton supprimer critique -->
+            <button type="submit" name="delete_review" class="btn btn-danger w-auto"
+                    onclick="return confirm('Voulez-vous vraiment supprimer uniquement la critique ?');">
+                Supprimer la critique
+            </button>
+
+            <!-- Bouton supprimer ticket -->
+            <button type="submit" name="delete_ticket" class="btn btn-danger w-auto"
+                    onclick="return confirm('Voulez-vous vraiment supprimer le ticket ET la critique ?');">
+                Supprimer le ticket
+            </button>
         </div>
     </form>
 </div>

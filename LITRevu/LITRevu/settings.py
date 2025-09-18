@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'LITRevu',
     'authentication.apps.AuthenticationConfig',
     'tickets.apps.TicketsConfig',
     'reviews.apps.ReviewsConfig',
     'userfollows.apps.UserfollowsConfig',
-    'LITRevu',
     'posts.apps.PostsConfig',
+    'core.apps.CoreConfig',
+    'flux.apps.FluxConfig',
 ]
 
 MIDDLEWARE = [

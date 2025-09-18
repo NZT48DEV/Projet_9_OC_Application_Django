@@ -26,11 +26,11 @@
 
         <!-- Boutons si c'est l'utilisateur -->
         {% if request.user == ticket.user %}
-            <div class="d-flex">
-                <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning me-2">
+            <div class="text-end">
+                <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning btn-sm me-2">
                     Modifier le ticket
                 </a>
-                <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger">
+                <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">
                     Supprimer le ticket
                 </a>
             </div>
@@ -49,10 +49,13 @@
 
     {% if not user_review %}
         <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
-            Répondre par une critique
+            Ajouter une critique
         </a>
     {% endif %}
 
-    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Retour Home</a>
+    <div class="text-end">
+        <a href="{% url 'user_posts' %}" class="btn btn-secondary me-2">Vos Posts</a>
+        <a href="{% url 'home' %}" class="btn btn-primary me-2">Accueil</a>
+    </div>
 </div>
 {% endblock %}

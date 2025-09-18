@@ -38,7 +38,16 @@
             <div class="text-end">
                 <button type="submit" class="btn btn-success">Enregistrer</button>
                 <a href="{% url 'view_review' review.id %}" class="btn btn-secondary">Annuler</a>
+
             </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" name="delete_review" class="btn btn-danger w-auto"
+                    onclick="return confirm('Voulez-vous vraiment supprimer uniquement la critique ?');">
+                Supprimer la critique
+                </button>
+            </div>
+
         </fieldset>
     </form>
 </div>

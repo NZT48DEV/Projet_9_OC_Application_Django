@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Gérer vos abonnements</h2>
+
+    <!-- Formulaire -->
+    <form method="post" class="d-flex mb-4">
+        {% csrf_token %}
+        <input type="text" name="username" class="form-control" placeholder="Nom d'utilisateur">
+        <button type="submit" class="btn btn-primary ms-2">S'abonner</button>
+    </form>
+
+    <h3>Abonnements</h3>
+    <ul class="list-group mb-4">
+        {% for follow in following %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ follow.followed_user.username }}
+                <a href="{% url 'unfollow' follow.followed_user.id %}" class="btn btn-danger btn-sm">Désabonner</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucun abonnement.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Abonnés</h3>
+    <ul class="list-group">
+        {% for follower in followers %}
+            <li class="list-group-item">
+                {{ follower.user.username }}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucun abonné.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

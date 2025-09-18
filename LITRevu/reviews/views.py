@@ -112,6 +112,18 @@ def update_review_with_ticket(request, review_id):
     ticket = review.ticket
 
     if request.method == "POST":
+        if "delete_review" in request.POST:
+            review.delete()
+            messages.success(request, "✅ Votre critique a bien été supprimée.")
+            return redirect("user_posts")
+
+        if "delete_ticket" in request.POST:
+            # Supprime ticket + critique
+            ticket.delete()
+            messages.success(request, "✅ Votre ticket a bien été supprimé.")
+            return redirect("user_posts")
+
+        # Sinon → c’est le bouton "Enregistrer"
         ticket_form = TicketForm(request.POST, instance=ticket)
         image_form = ImageForm(request.POST, request.FILES, instance=ticket.image if ticket.image else None)
         review_form = ReviewForm(request.POST, instance=review)
@@ -133,7 +145,8 @@ def update_review_with_ticket(request, review_id):
             review.ticket = ticket
             review.save()
 
-            return redirect("user_posts")  # ou "home", selon ton flux
+            messages.success(request, "✅ Vos modifications ont bien été enregistrées.")
+            return redirect("user_posts")
     else:
         ticket_form = TicketForm(instance=ticket)
         image_form = ImageForm(instance=ticket.image if ticket.image else None)
@@ -146,6 +159,7 @@ def update_review_with_ticket(request, review_id):
         "ticket": ticket,
         "review": review,
     })
+
 
 
 @login_required
