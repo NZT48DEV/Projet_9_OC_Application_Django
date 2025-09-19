@@ -4,10 +4,12 @@
     <h2 class="text-center mb-4">Gérer vos abonnements</h2>
 
     <!-- Formulaire -->
-    <form method="post" class="d-flex mb-4">
+    <form method="post" class="d-flex mb-4 position-relative">
         {% csrf_token %}
-        <input type="text" name="username" class="form-control" placeholder="Nom d'utilisateur">
+        <input type="text" id="search-user" name="username" class="form-control" placeholder="Nom d'utilisateur" autocomplete="off">
         <button type="submit" class="btn btn-primary ms-2">S'abonner</button>
+        <!-- Suggestions -->
+        <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
     </form>
 
     <h3>Abonnements</h3>

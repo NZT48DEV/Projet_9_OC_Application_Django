@@ -48,6 +48,7 @@ urlpatterns = [
     path("review_with_ticket/<int:review_id>/delete/", reviews.views.delete_review_with_ticket, name="delete_review_with_ticket"),
     path("subscriptions/", userfollows.views.subscriptions, name="subscriptions"),
     path("unfollow/<int:user_id>/", userfollows.views.unfollow, name="unfollow"),
+    path("search-users/", userfollows.views.search_users, name="search_users"),
 ]
 
 if settings.DEBUG:

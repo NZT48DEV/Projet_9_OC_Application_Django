@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .models import UserFollows
+from django.http import JsonResponse
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -45,3 +47,14 @@ def unfollow(request, user_id):
         link.delete()
         messages.success(request, f"🚫 Vous vous êtes désabonné de {user_to_unfollow.username}.")
     return redirect("subscriptions")
+
+@login_required
+def search_users(request):
+    query = request.GET.get("q", "")
+    results = []
+    if query:
+        users = User.objects.filter(
+            Q(username__icontains=query)
+        ).exclude(id=request.user.id)[:5]  # limite à 5 résultats
+        results = list(users.values("id", "username"))
+    return JsonResponse(results, safe=False)
