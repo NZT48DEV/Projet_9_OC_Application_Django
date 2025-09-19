@@ -5,7 +5,8 @@
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
+        <input type="hidden" name="next" value="{{ next }}">  <!-- ✅ Champ caché -->
+
         <h3>Livre/Article</h3>
         {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form ticket=ticket %}
 
@@ -32,6 +33,11 @@
                     onclick="return confirm('Voulez-vous vraiment supprimer le ticket ET la critique ?');">
                 Supprimer le ticket
             </button>
+
+            <!-- Bouton annuler -->
+            <a href="{{ next|default:'/' }}" class="btn btn-secondary w-auto">
+                Annuler
+            </a>
         </div>
     </form>
 </div>

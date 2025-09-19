@@ -24,11 +24,14 @@
   - les JS communs (notifications, toasts, etc.)
 - [x] Déplacer `custom_filters.py` dans `core/templatetags/`
 - [x] Mettre en place l'autocomplétion des utilisateurs dans la page des abonnements
+- [x] Ajout des |linebreaksbr (saut de ligne)
+- [x] Ajouter les notifications manquantes
+- [x] Correction de l'ordre d'affichage dans le flux 
+- [x] Ajout de next pour rediriger vers la page précédente lors d'une suppression ou d'une modification d'un ticket ou d'une critique
+- [x] Ajout de la possibilité de modifier/supprimer son ticket dans le flux [Fait grâce a read_only (True/False)]
+- [x] Mise en place du système d’abonnements entre utilisateurs (suivre, se désabonner, liste abonnés/abonnements).
 
 ## 🚧 En cours
-
-- [ ] Ajouter les notifications manquantes
-- [ ] Mise en place du système d’abonnements entre utilisateurs (suivre, se désabonner, liste abonnés/abonnements).
 - [ ] Revoir la gestion des messages flash pour homogénéiser (success, error, warning, info)
 - [ ] Améliorer le design des cartes (`review` / `ticket`) pour plus de cohérence
 - [ ] Refactoring sur les templates (éviter la répétition de code)
@@ -36,7 +39,7 @@
 ## 🎯 Pour demain
 - [ ] Améliorer le visuel du site
 - [ ] Ajouter la pagination des posts
-
+- [ ] Enlever le lien Admin
 
 ## 🚀 Pour plus tard
 - [ ] Adapter le site pour respecter les WCAG

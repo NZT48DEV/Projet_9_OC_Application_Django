@@ -2,10 +2,14 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center mb-4">Créer une critique</h2>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ ticket_form.non_field_errors }}
         {{ review_form.non_field_errors }}
+
+        <!-- Champ caché pour conserver la page précédente -->
+        <input type="hidden" name="next" value="{{ next }}">
 
         <!-- Formulaire du ticket -->
         <h3>Livre/Article</h3>
@@ -15,9 +19,12 @@
 
         <!-- Formulaire de la review -->
         <h3>Critique</h3>
-        {% include "reviews/partials/_review_form.html" with form=review_form    %}
+        {% include "reviews/partials/_review_form.html" with form=review_form %}
 
-        <div class="text-end">
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <!-- Bouton Annuler -->
+            <a href="{{ next|default:'/' }}" class="btn btn-secondary">Annuler</a>
+            <!-- Bouton Envoyer -->
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </div>
     </form>

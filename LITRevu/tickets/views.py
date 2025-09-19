@@ -7,11 +7,18 @@ from tickets.models import Ticket
 from tickets.forms import TicketForm, ImageForm
 from reviews.models import Review
 
+
 @login_required
 def home(request):
     images = models.Image.objects.all()
     tickets = models.Ticket.objects.all()
-    return render(request, 'tickets/home.html', context={'images': images, 'tickets': tickets})
+    return render(request, 'tickets/home.html', {
+        'images': images,
+        'tickets': tickets,
+        'read_only': True,                   # lecture seule
+        'next': request.GET.get("next", ""), # pour naviguer proprement
+    })
+
 
 @login_required
 def image_upload(request):
@@ -22,8 +29,14 @@ def image_upload(request):
             image = form.save(commit=False)
             image.uploader = request.user
             image.save()
-            return redirect('home')
-    return render(request, 'tickets/image_upload.html', context={'form': form})
+            next_url = request.POST.get("next")
+            return redirect(next_url or 'home')
+    return render(request, 'tickets/image_upload.html', {
+        'form': form,
+        'read_only': False,                  # on est en création
+        'next': request.GET.get("next", ""),
+    })
+
 
 @login_required
 def create_ticket(request):
@@ -38,15 +51,17 @@ def create_ticket(request):
             image.save()
             ticket = ticket_form.save(commit=False)
             ticket.image = image
-            ticket.user = request.user  # ⚠ pas ticket.author, ton champ s'appelle user
+            ticket.user = request.user  # ⚠ champ correct
             ticket.save()
             messages.success(request, "✅ Votre ticket a bien été créé.")
-            return redirect('home')
-    context = {
+            next_url = request.POST.get("next")
+            return redirect(next_url or 'home')
+    return render(request, 'tickets/create_ticket.html', {
         'ticket_form': ticket_form,
         'image_form': image_form,
-    }
-    return render(request, 'tickets/create_ticket.html', context=context)
+        'read_only': False,                  # on est en création
+        'next': request.GET.get("next", ""),
+    })
 
 
 @login_required
@@ -61,10 +76,13 @@ def view_ticket(request, ticket_id):
 
     return render(request, "tickets/view_ticket.html", {
         "ticket": ticket,
-        "reviews": reviews,        
-        "user_review": user_review,  
-        "hide_ticket": True, 
+        "reviews": reviews,
+        "user_review": user_review,
+        "hide_ticket": True,                   # tu gardes ta logique
+        "read_only": True,                     # page de lecture seule
+        "next": request.GET.get("next", ""),   # pour pouvoir revenir facilement
     })
+
 
 
 @login_required
@@ -72,17 +90,21 @@ def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == "POST":
+        next_url = request.POST.get("next")  # récupère next du formulaire
         ticket.delete()
         messages.success(request, "✅ Votre ticket a bien été supprimé.")
-        return redirect('user_posts')  # ou 'home' si tu préfères
+        return redirect(next_url or "user_posts")  # fallback si pas de next
 
     return render(request, 'tickets/delete_ticket.html', {
         "ticket": ticket,
-        "review": None,
-        "read_only": True
+        "review": None,                
+        "read_only": True,             
+        "next": request.GET.get("next", ""),  
     })
 
 
+
+@login_required
 def update_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
@@ -100,17 +122,22 @@ def update_ticket(request, ticket_id):
             updated_ticket = ticket_form.save(commit=False)
             updated_ticket.image = image
             updated_ticket.save()
+
             messages.success(request, "✅ Votre ticket a bien été modifié.")
-            return redirect('view_ticket', ticket_id=updated_ticket.pk)  # <-- pk sûr
+            next_url = request.POST.get("next")
+            return redirect(next_url or "view_ticket", ticket_id=updated_ticket.pk)
+
     else:
         ticket_form = TicketForm(instance=ticket)
         image_form = ImageForm(instance=ticket.image)
 
     return render(request, 'tickets/update_ticket.html', {
-    'ticket_form': ticket_form,
-    'image_form': image_form,
-    'ticket': ticket,
-    "review": None,
-    "read_only": False
-})
+        'ticket_form': ticket_form,
+        'image_form': image_form,
+        'ticket': ticket,
+        "review": None,           # tu gardes ta logique initiale
+        "read_only": False,       # important pour tes partials
+        "next": request.GET.get("next", ""),  # next pour revenir à la bonne page
+    })
+
 

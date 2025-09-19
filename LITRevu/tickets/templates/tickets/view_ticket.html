@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block content %}
 <div class="container">
     <h3 class="mb-3">{{ ticket.get_type_display }}</h3>
@@ -18,7 +19,7 @@
 
         <!-- Contenu -->
         <h2 class="card-title">{{ ticket.title }}</h2>
-        <p class="card-text">{{ ticket.description }}</p>
+        <p class="card-text">{{ ticket.description|linebreaksbr }}</p>
 
         {% if ticket.image %}
             <img src="{{ ticket.image.image.url }}" alt="image du ticket" class="img-fluid rounded mb-3" style="max-width:250px;">
@@ -27,10 +28,10 @@
         <!-- Boutons si c'est l'utilisateur -->
         {% if request.user == ticket.user %}
             <div class="text-end">
-                <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning btn-sm me-2">
+                <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
                     Modifier le ticket
                 </a>
-                <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">
+                <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
                     Supprimer le ticket
                 </a>
             </div>
@@ -41,7 +42,20 @@
 
     {% if reviews %}
         {% for review in reviews %}
-            {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+            <div class="card bg-light p-3 mb-3">
+                {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+                
+                {% if review.user == request.user %}
+                    <div class="text-end mt-2">
+                        <a href="{% url 'update_review' review.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
+                            Modifier la critique
+                        </a>
+                        <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
+                            Supprimer la critique
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         {% endfor %}
     {% else %}
         <p class="text-muted">Aucune critique pour le moment.</p>
@@ -54,8 +68,8 @@
     {% endif %}
 
     <div class="text-end">
-        <a href="{% url 'user_posts' %}" class="btn btn-secondary me-2">Vos Posts</a>
-        <a href="{% url 'home' %}" class="btn btn-primary me-2">Accueil</a>
+        <a href="{% url 'home' %}" class="btn btn-primary me-2">Flux</a>
+        <a href="{% url 'user_posts' %}" class="btn btn-secondary me-2">Posts</a>
     </div>
 </div>
 {% endblock %}

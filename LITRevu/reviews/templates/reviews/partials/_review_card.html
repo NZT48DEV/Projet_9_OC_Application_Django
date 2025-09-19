@@ -26,7 +26,7 @@
     </h5>
 
     <!-- Corps -->
-    <p>{{ review.body }}</p>
+    <p>{{ review.body|linebreaksbr }}</p>
 
     {% if not hide_ticket %}
         <!-- Ticket associé (sauf si on masque volontairement) -->
@@ -39,10 +39,10 @@
     {% if not read_only and review.user == request.user %}
         <div class="d-flex justify-content-end">
                 <!-- Cas où le ticket appartient à quelqu’un d’autre -->
-                <a href="{% url 'update_review' review.id %}" class="btn btn-warning btn-sm me-2">
+                <a href="{% url 'update_review' review.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
                     Modifier la critique
                 </a>
-                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger btn-sm">
+                <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
                     Supprimer la critique
                 </a>
         </div>

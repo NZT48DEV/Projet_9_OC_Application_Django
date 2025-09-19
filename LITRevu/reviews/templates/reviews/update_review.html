@@ -8,6 +8,7 @@
     <!-- Formulaire critique -->
     <form method="post">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
         <fieldset class="border p-3">
             <legend class="w-auto">Critique</legend>
 

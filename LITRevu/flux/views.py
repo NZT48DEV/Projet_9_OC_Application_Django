@@ -4,10 +4,14 @@ from tickets.models import Ticket
 from reviews.models import Review
 
 
-# Create your views here.
 @login_required
 def home(request):
-    tickets = Ticket.objects.all().select_related("user").prefetch_related("review_set")
+    tickets = (
+        Ticket.objects.all()
+        .select_related("user")
+        .prefetch_related("review_set")
+        .order_by("-time_created")  # plus récents en premier
+    )
 
     # IDs des tickets déjà critiqués par l’utilisateur courant
     reviewed_ticket_ids = set(
@@ -16,5 +20,7 @@ def home(request):
 
     return render(request, "flux/home.html", {
         "tickets": tickets,
-        "reviewed_ticket_ids": reviewed_ticket_ids
+        "reviewed_ticket_ids": reviewed_ticket_ids,
+        "read_only": True,                    # cohérence : ici on consulte seulement / Si False, on aura accès aux boutons de modification/suppression
+        "next": request.GET.get("next", ""),  # pour gérer le retour fluide
     })

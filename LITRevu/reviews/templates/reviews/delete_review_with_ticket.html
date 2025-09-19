@@ -30,13 +30,14 @@
 
     <!-- Bloc Ticket associé -->
     <div class="card bg-light p-3 mb-3">
-        {% include "tickets/partials/_ticket_card.html" with ticket=ticket review=True %}
+        {% include "tickets/partials/_ticket_card.html" with ticket=ticket review=True read_only=True %}
     </div>
 
     <!-- Boutons de confirmation -->
     <form method="post" class="text-end">
         {% csrf_token %}
-        <a href="{% url 'user_posts' %}" class="btn btn-secondary">Annuler</a>
+        <input type="hidden" name="next" value="{{ next }}"> <!-- ✅ on garde la page précédente -->
+        <a href="{{ next|default:'/' }}" class="btn btn-secondary">Annuler</a>
         <button type="submit" class="btn btn-danger">Supprimer</button>
     </form>
 </div>

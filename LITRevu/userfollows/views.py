@@ -45,16 +45,25 @@ def unfollow(request, user_id):
     link = UserFollows.objects.filter(user=request.user, followed_user=user_to_unfollow)
     if link.exists():
         link.delete()
-        messages.success(request, f"🚫 Vous vous êtes désabonné de {user_to_unfollow.username}.")
+        messages.success(request, f"✅ Vous vous êtes désabonné de {user_to_unfollow.username}.")
     return redirect("subscriptions")
 
 @login_required
 def search_users(request):
-    query = request.GET.get("q", "")
+    query = request.GET.get("q", "").strip()
     results = []
+
     if query:
-        users = User.objects.filter(
-            Q(username__icontains=query)
-        ).exclude(id=request.user.id)[:5]  # limite à 5 résultats
-        results = list(users.values("id", "username"))
+        # récupère tous les users qui matchent la recherche
+        users = User.objects.filter(username__icontains=query)
+
+        # on exclut soi-même
+        users = users.exclude(id=request.user.id)
+
+        # on exclut ceux qu’on suit déjà
+        already_following = UserFollows.objects.filter(user=request.user).values_list("followed_user_id", flat=True)
+        users = users.exclude(id__in=already_following)
+
+        results = list(users.values("id", "username")[:10])  # limite à 10 résultats
+
     return JsonResponse(results, safe=False)

@@ -6,10 +6,12 @@
 
     {% include "tickets/partials/_ticket_card.html" with ticket=ticket message="Vous êtes en train de poster en réponse à" %}
 
-
     <!-- Bloc critique -->
     <form method="post">
         {% csrf_token %}
+        <!-- Champ caché pour la redirection -->
+        <input type="hidden" name="next" value="{{ next }}">
+
         <fieldset class="border p-3">
             <legend class="w-auto">Critique</legend>
 
@@ -37,11 +39,12 @@
                 {{ review_form.body }}
             </div>
             
-            <div class="text-end">
+            <div class="d-flex justify-content-end gap-2">
+                <!-- Bouton Annuler -->
+                <a href="{{ next|default:'/' }}" class="btn btn-secondary">Annuler</a>
+                <!-- Bouton Envoyer -->
                 <button type="submit" class="btn btn-success">Envoyer</button>
-                <a href="{% url 'view_ticket' ticket.id %}" class="btn btn-secondary">Annuler</a>
             </div>
-
         </fieldset>
     </form>
 </div>

@@ -13,19 +13,19 @@
     </div>
 
     <h4>{{ ticket.title }}</h4>
-    <p>{{ ticket.description }}</p>
+    <p>{{ ticket.description|linebreaksbr }}</p>
 
     {% if ticket.image %}
         <img src="{{ ticket.image.image.url }}" class="img-thumbnail" style="max-width:200px;">
     {% endif %}
 
-    {% if not review and not read_only %}
-        <!-- Boutons affichés uniquement si :
-             - ce ticket n'est pas lié à une review
-             - ET qu'on n'est pas en mode read_only -->
+    {% if ticket.user == request.user and not review and not read_only %}
         <div class="d-flex justify-content-end mt-2">
-            <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-warning btn-sm me-2">Modifier le ticket</a>
-            <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">Supprimer le ticket</a>
+            <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" 
+            class="btn btn-warning btn-sm me-2">Modifier le ticket</a>
+            <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" 
+            class="btn btn-danger btn-sm">Supprimer le ticket</a>
         </div>
     {% endif %}
+
 </div>

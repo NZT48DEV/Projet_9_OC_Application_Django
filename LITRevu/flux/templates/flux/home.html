@@ -4,49 +4,30 @@
 
 <div class="container mt-4">
     <!-- Boutons haut de page -->
-    <div class="d-flex justify-content-center gap-2 mb-4">
-        <a href="{% url 'create_ticket' %}" class="btn btn-outline-dark">Demander une critique</a>
-        <a href="{% url 'create_review_with_ticket' %}" class="btn btn-outline-dark">Créer une critique</a>
+    <div class="d-flex justify-content-center gap-5 mb-5">
+        <a href="{% url 'create_ticket' %}" class="btn btn-outline-dark p-3">Demander une critique</a>
+        <a href="{% url 'create_review_with_ticket' %}" class="btn btn-outline-dark p-3">Créer une critique</a>
     </div>
 
     <!-- Flux -->
     {% for ticket in tickets %}
         <div class="card mb-4 p-3">
-            <!-- Header -->
-            <div class="d-flex justify-content-between">
-                <p>
-                    {% if request.user == ticket.user %}
-                        <em>Vous avez demandé une critique</em>
-                    {% else %}
-                        <strong>{{ ticket.user.username }}</strong> a demandé une critique
-                    {% endif %}
-                </p>
-                <small class="text-muted">{{ ticket.time_created|format_date }}</small>
-            </div>
 
-            <!-- Contenu ticket -->
-            <h5>{{ ticket.title }}</h5>
-            <p>{{ ticket.description }}</p>
-            {% if ticket.image %}
-                <img src="{{ ticket.image.image.url }}" alt="image du ticket"
-                     class="img-thumbnail mb-2" style="max-width:200px;">
-            {% endif %}
+            <!-- ✅ On inclut ton partial ticket -->
+            {% include "tickets/partials/_ticket_card.html" with ticket=ticket %}
 
             <!-- Critiques associées -->
             {% if ticket.review_set.all %}
-                {# il y a au moins une critique #}
                 {% for review in ticket.review_set.all %}
                     <div class="card bg-light p-3 mt-3">
                         {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
                     </div>
                 {% endfor %}
             {% else %}
-                {# aucune critique #}
                 <div class="card bg-light p-3 mt-3">
                     <p class="text-muted">Aucune critique pour le moment.</p>
                 </div>
             {% endif %}
-
 
             <!-- Bouton créer une critique si l'utilisateur n'a pas encore répondu -->
             {% if ticket.id not in reviewed_ticket_ids %}
