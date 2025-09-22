@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card p-4 shadow-sm text-center" style="min-width: 300px; max-width: 400px; width: 100%;">
-        <h2 class="mb-4">Inscrivez-vous</h2>
+<div class="d-flex justify-content-center mt-5">
+    <div class="card p-4 shadow-lg rounded-3 border-0" style="min-width: 320px; max-width: 420px; width: 100%;">
+        <h2 class="mb-4 text-center">📝 Inscription</h2>
 
         <form method="post">
             {% csrf_token %}
@@ -24,9 +24,13 @@
                 {{ form.password2.errors }}
             </div>
 
-            <div class="d-flex justify-content-center gap-2">
-                <a href="{% url 'welcome' %}" class="btn btn-secondary">Retourner</a>
-                <button type="submit" class="btn btn-primary">S’inscrire</button>
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'welcome' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> S’inscrire
+                </button>
             </div>
         </form>
     </div>

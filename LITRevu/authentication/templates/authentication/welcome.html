@@ -1,29 +1,54 @@
 {% extends 'base.html' %}
-{% block left_content %}
-    <h2>Inscrivez-vous maintenant</h2>
-    <form action="{% url 'signup' %}">
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
-    </form>
-    
-{% endblock left_content %}
 
-{% block right_content %}
-    <h2>Connectez-vous</h2>
-    <form method="post">
-        {% csrf_token %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center g-4">
 
-        {{ form.non_field_errors }}
-
-        <div class="mb-3">
-            {{ form.username }}
-            {{ form.username.errors }}
+        <!-- Bloc inscription -->
+        <div class="col-md-5">
+            <div class="card shadow-lg rounded-3 text-center border-0 h-100">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-3">🆕 Créez votre compte</h3>
+                    <p class="text-muted">Rejoignez la communauté et commencez à partager vos critiques dès aujourd’hui.</p>
+                    <form action="{% url 'signup' %}">
+                        <button type="submit" class="btn btn-success w-100 btn-lg">
+                            <i class="bi bi-person-plus-fill"></i> S’inscrire
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            {{ form.password }}
-            {{ form.password.errors }}
+        <!-- Bloc connexion -->
+        <div class="col-md-5">
+            <div class="card shadow-lg rounded-3 border-0 h-100">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-3 text-center">🔑 Connexion</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <div class="mb-3">
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                        </button>
+                    </form>
+                    <p class="mt-3 text-center small text-muted">
+                        Pas encore inscrit ? <a href="{% url 'signup' %}">Créez un compte</a>
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Se connecter</button>
-    </form>
-{% endblock right_content %}
+    </div>
+</div>
+{% endblock %}

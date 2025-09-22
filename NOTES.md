@@ -30,16 +30,23 @@
 - [x] Ajout de next pour rediriger vers la page précédente lors d'une suppression ou d'une modification d'un ticket ou d'une critique
 - [x] Ajout de la possibilité de modifier/supprimer son ticket dans le flux [Fait grâce a read_only (True/False)]
 - [x] Mise en place du système d’abonnements entre utilisateurs (suivre, se désabonner, liste abonnés/abonnements).
+- [x] Modifier la gestion des critiques (si une critique est déjà présente, impossibilité d'en ajouter une nouvelle (+ notif))
+- [x] Avoir la possibilité de bloquer un utilisateur (éviter qu'il puisse nous suivre, nous contacter, etc.)
+- [x] Voir les tickets uniquement des personnes qu'on suit. 
+- [x] Ajout d'un filtre pour avoir la possibilité de voir soit les tickets des abonnés (Mes abonnements), soit de tout le monde (Tous les posts).
+- [x] Enregistrer le choix du filtre pour la session.
+- [x] Voir les critiques associés aux personnes des tickets qu'on suit, même si la critique est posté par un autre utilisateur.
+- [x] Ne pas pouvoir accéder a un ticket ou une review d'une personne qui ma bloqué.
 
 ## 🚧 En cours
-- [ ] Revoir la gestion des messages flash pour homogénéiser (success, error, warning, info)
+- [ ] Améliorer le visuel du site
 - [ ] Améliorer le design des cartes (`review` / `ticket`) pour plus de cohérence
 - [ ] Refactoring sur les templates (éviter la répétition de code)
 
 ## 🎯 Pour demain
-- [ ] Améliorer le visuel du site
 - [ ] Ajouter la pagination des posts
 - [ ] Enlever le lien Admin
+
 
 ## 🚀 Pour plus tard
 - [ ] Adapter le site pour respecter les WCAG
@@ -54,3 +61,6 @@
 - [ ] Sessions Django classiques (cookies de session)
 - [ ] Créer la gestion du profil utilisateur (affichage des infos, modification, etc.)
 - [ ] Afficher l’indication d’édition sur une critique ou un post et mettre à jour l’heure de dernière modification.
+- [ ] Ajouter un Dark Mode
+
+

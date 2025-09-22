@@ -49,6 +49,10 @@ urlpatterns = [
     path("subscriptions/", userfollows.views.subscriptions, name="subscriptions"),
     path("unfollow/<int:user_id>/", userfollows.views.unfollow, name="unfollow"),
     path("search-users/", userfollows.views.search_users, name="search_users"),
+    path("block/<int:user_id>/", userfollows.views.block_user, name="block_user"),
+    path("unblock/<int:user_id>/", userfollows.views.unblock_user, name="unblock_user"),
+    path("block/search/", userfollows.views.block_user_search, name="block_user_search"),
+
 ]
 
 if settings.DEBUG:

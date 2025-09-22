@@ -1,8 +1,8 @@
 {% load custom_filters %}
 
-<div class="card p-3">
-    <div class="d-flex justify-content-between">
-        <p>
+<div class="card p-3 shadow-sm border-0">
+    <div class="d-flex justify-content-between mb-2">
+        <p class="mb-0">
             {% if ticket.user == request.user %}
                 <em>Vous avez demandé une critique</em>
             {% else %}
@@ -12,20 +12,23 @@
         <small class="text-muted">{{ ticket.time_created|format_date }}</small>
     </div>
 
-    <h4>{{ ticket.title }}</h4>
+    <h4 class="fw-bold">{{ ticket.title }}</h4>
     <p>{{ ticket.description|linebreaksbr }}</p>
 
     {% if ticket.image %}
-        <img src="{{ ticket.image.image.url }}" class="img-thumbnail" style="max-width:200px;">
+        <img src="{{ ticket.image.image.url }}" class="img-thumbnail mb-2" style="max-width:200px;">
     {% endif %}
 
     {% if ticket.user == request.user and not review and not read_only %}
         <div class="d-flex justify-content-end mt-2">
             <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" 
-            class="btn btn-warning btn-sm me-2">Modifier le ticket</a>
+               class="btn btn-warning btn-sm me-2">
+               <i class="bi bi-pencil-square"></i> Modifier
+            </a>
             <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" 
-            class="btn btn-danger btn-sm">Supprimer le ticket</a>
+               class="btn btn-danger btn-sm">
+               <i class="bi bi-trash"></i> Supprimer
+            </a>
         </div>
     {% endif %}
-
 </div>

@@ -22,10 +22,10 @@
         {% include "reviews/partials/_review_form.html" with form=review_form %}
 
         <div class="d-flex justify-content-end gap-2 mt-3">
-            <!-- Bouton Annuler -->
-            <a href="{{ next|default:'/' }}" class="btn btn-secondary">Annuler</a>
             <!-- Bouton Envoyer -->
             <button type="submit" class="btn btn-primary">Envoyer</button>
+            <!-- Bouton Annuler -->
+            <a href="{{ next|default:'/' }}" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>

@@ -1,38 +1,103 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Gérer vos abonnements</h2>
 
-    <!-- Formulaire -->
-    <form method="post" class="d-flex mb-4 position-relative">
-        {% csrf_token %}
-        <input type="text" id="search-user" name="username" class="form-control" placeholder="Nom d'utilisateur" autocomplete="off">
-        <button type="submit" class="btn btn-primary ms-2">S'abonner</button>
-        <!-- Suggestions -->
-        <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
-    </form>
+    <!-- Titre principal -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">👥 Gérer vos abonnements</h2>
+        <p class="text-muted">Suivez de nouveaux utilisateurs ou gérez vos abonnements et blocages.</p>
+    </div>
 
-    <h3>Abonnements</h3>
-    <ul class="list-group mb-4">
-        {% for follow in following %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ follow.followed_user.username }}
-                <a href="{% url 'unfollow' follow.followed_user.id %}" class="btn btn-danger btn-sm">Désabonner</a>
-            </li>
-        {% empty %}
-            <li class="list-group-item">Aucun abonnement.</li>
-        {% endfor %}
-    </ul>
+    <!-- 🔹 Barre de recherche pour s'abonner -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h4 class="card-title mb-3">S'abonner à un utilisateur</h4>
+            <form method="post" class="d-flex position-relative">
+                {% csrf_token %}
+                <input type="text" id="search-user-follow" name="username" 
+                       class="form-control" placeholder="Nom d'utilisateur à suivre" autocomplete="off">
+                <button type="submit" class="btn btn-primary ms-2">
+                    <i class="bi bi-person-plus"></i> S'abonner
+                </button>
+                <ul id="suggestions-follow" class="list-group position-absolute w-100" 
+                    style="top: 100%; z-index: 1000;"></ul>
+            </form>
+        </div>
+    </div>
 
-    <h3>Abonnés</h3>
-    <ul class="list-group">
-        {% for follower in followers %}
-            <li class="list-group-item">
-                {{ follower.user.username }}
-            </li>
-        {% empty %}
-            <li class="list-group-item">Aucun abonné.</li>
-        {% endfor %}
-    </ul>
+    <!-- 🔹 Liste des abonnements -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h4 class="card-title mb-3">📌 Abonnements</h4>
+            <ul class="list-group">
+                {% for follow in following %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ follow.followed_user.username }}
+                        <a href="{% url 'unfollow' follow.followed_user.id %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-person-dash"></i> Désabonner
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted text-center">Vous ne suivez personne pour l’instant.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- 🔹 Liste des abonnés -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h4 class="card-title mb-3">👀 Abonnés</h4>
+            <ul class="list-group">
+                {% for follower in followers %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ follower.user.username }}
+                        <a href="{% url 'block_user' follower.user.id %}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-person-x"></i> Bloquer
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted text-center">Vous n’avez aucun abonné pour le moment.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- 🔹 Bloquer un utilisateur -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h4 class="card-title mb-3">🚫 Bloquer un utilisateur</h4>
+            <form method="post" action="{% url 'block_user_search' %}" class="d-flex position-relative">
+                {% csrf_token %}
+                <input type="text" id="search-user-block" name="username" 
+                       class="form-control" placeholder="Nom d'utilisateur à bloquer" autocomplete="off">
+                <button type="submit" class="btn btn-warning ms-2">
+                    <i class="bi bi-shield-exclamation"></i> Bloquer
+                </button>
+                <ul id="suggestions-block" class="list-group position-absolute w-100" 
+                    style="top: 100%; z-index: 1000;"></ul>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🔹 Liste des utilisateurs bloqués -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title mb-3">⛔ Utilisateurs bloqués</h4>
+            <ul class="list-group">
+                {% for blocked in blocked_list %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ blocked.blocked_user.username }}
+                        <a href="{% url 'unblock_user' blocked.blocked_user.id %}" class="btn btn-success btn-sm">
+                            <i class="bi bi-unlock"></i> Débloquer
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted text-center">Aucun utilisateur bloqué.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -1,37 +1,37 @@
 {% load static %}
 
 <div class="mb-3">
-    {{ ticket_form.title.label_tag }}
+    <label class="form-label">{{ ticket_form.title.label }}</label>
     {{ ticket_form.title }}
 </div>
 
 <div class="mb-3">
-    {{ ticket_form.description.label_tag }}
+    <label class="form-label">{{ ticket_form.description.label }}</label>
     {{ ticket_form.description }}
 </div>
 
-<div class="mb-3 col-3">
-    {{ ticket_form.type.label_tag }}
+<div class="mb-3 col-6">
+    <label class="form-label">{{ ticket_form.type.label }}</label>
     {{ ticket_form.type }}
 </div>
 
 <div class="mb-3">
-    <label>Image actuelle :</label><br>
+    <label class="form-label">Image actuelle :</label><br>
     <img id="preview" 
          src="{% if ticket.image %}{{ ticket.image.image.url }}{% endif %}" 
          alt="aperçu image" 
-         class="img-thumbnail"
+         class="img-thumbnail mb-2"
          {% if ticket.image %}
              style="max-width: 200px; height: auto;"
          {% else %}
              style="display:none; max-width: 200px; height: auto;"
          {% endif %}>
     {% if not ticket.image %}
-        <p id="no-image">Aucune image</p>
+        <p id="no-image" class="text-muted">Aucune image</p>
     {% endif %}
 </div>
 
-<div class="mb-3 col-3">
-    {{ image_form.image.label_tag }}
+<div class="mb-3">
+    <label class="form-label">{{ image_form.image.label }}</label>
     {{ image_form.image }}
 </div>

@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from . import forms, models
-from django.shortcuts import get_object_or_404
 from tickets.models import Ticket
 from tickets.forms import TicketForm, ImageForm
 from reviews.models import Review
+from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
 
 
 @login_required
@@ -68,6 +68,11 @@ def create_ticket(request):
 def view_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
+    # ✅ Vérifie si l’auteur du ticket a bloqué l’utilisateur courant
+    if UserBlock.objects.filter(user=ticket.user, blocked_user=request.user).exists():
+        messages.error(request, "❌ Ce ticket n'est pas disponible.")
+        return redirect("home")
+
     # Toutes les critiques liées à ce ticket
     reviews = Review.objects.filter(ticket=ticket)
 
@@ -84,11 +89,11 @@ def view_ticket(request, ticket_id):
     })
 
 
-
 @login_required
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
+    # ✅ Pas besoin de vérifier blocage ici car seul l'auteur peut supprimer
     if request.method == "POST":
         next_url = request.POST.get("next")  # récupère next du formulaire
         ticket.delete()
@@ -103,11 +108,11 @@ def delete_ticket(request, ticket_id):
     })
 
 
-
 @login_required
 def update_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
+    # ✅ Pas besoin de vérifier blocage ici non plus car seul l'auteur peut modifier
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, instance=ticket)
         image_form = ImageForm(request.POST, request.FILES, instance=ticket.image)
@@ -139,5 +144,3 @@ def update_ticket(request, ticket_id):
         "read_only": False,       # important pour tes partials
         "next": request.GET.get("next", ""),  # next pour revenir à la bonne page
     })
-
-

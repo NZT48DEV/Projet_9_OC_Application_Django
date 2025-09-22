@@ -1,27 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Titre : {{ review.headline }}</h2>
-    <p>Note : {{ review.rating }}</p>
-    <p>Commentaire : {{ review.body }}</p>
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ review.user.username }}</strong>
+                <small class="text-muted"> — {{ review.time_created|date:"d/m/Y H:i" }}</small>
+            </div>
+            <span class="badge bg-info">Critique</span>
+        </div>
 
-    <!-- Boutons -->
-    <br>
-    {% if request.user == review.user %}
-        <!-- Bouton Modifier -->
-        <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
-           class="btn btn-warning" style="margin-top: 20px;">
-            Modifier la critique
-        </a>
+        <div class="card-body">
+            <!-- Titre -->
+            <h5 class="card-title">{{ review.headline }}</h5>
 
-        <!-- Bouton Supprimer -->
-        <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
-           class="btn btn-danger" style="margin-top: 20px;">
-            Supprimer la critique
-        </a>
-    {% endif %}
+            <!-- Note -->
+            <p>
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        ⭐
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </p>
 
-    <!-- Bouton Retour -->
-    <a href="{{ request.GET.next|default:'/' }}" class="btn btn-primary" style="margin-top: 20px;">
-        Retour
-    </a>
+            <!-- Commentaire -->
+            <p class="card-text">{{ review.body }}</p>
+
+            <!-- Ticket lié -->
+            {% if review.ticket %}
+                <hr>
+                <h6 class="text-muted">Ticket associé :</h6>
+                <div class="border rounded p-3 bg-light">
+                    <p><strong>{{ review.ticket.title }}</strong></p>
+                    {% if review.ticket.image %}
+                        <img src="{{ review.ticket.image.image.url }}" class="img-fluid rounded" style="max-height: 200px;">
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <div>
+                {% if request.user == review.user %}
+                    <!-- Bouton Modifier -->
+                    <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
+                       class="btn btn-sm btn-warning">
+                        Modifier
+                    </a>
+                    <!-- Bouton Supprimer -->
+                    <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
+                       class="btn btn-sm btn-danger">
+                        Supprimer
+                    </a>
+                {% endif %}
+            </div>
+            <div>
+                <!-- Bouton Retour -->
+                <a href="{{ request.GET.next|default:'/' }}" class="btn btn-sm btn-primary">
+                    Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

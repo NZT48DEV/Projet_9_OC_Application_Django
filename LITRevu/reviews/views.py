@@ -5,11 +5,18 @@ from tickets.forms import TicketForm, ImageForm
 from reviews.forms import ReviewForm
 from reviews.models import Review
 from tickets.models import Ticket
+from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
 
 
 @login_required
 def view_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
+
+    # ✅ Vérifie si l’auteur du ticket lié a bloqué l’utilisateur courant
+    if UserBlock.objects.filter(user=review.ticket.user, blocked_user=request.user).exists():
+        messages.error(request, "❌ Cette critique n'est pas disponible.")
+        return redirect("home")
+
     return render(request, 'reviews/view_review.html', {'review': review})
 
 
@@ -56,9 +63,16 @@ def create_review_with_ticket(request):
 def create_review_response(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
-    # Vérifier si l’utilisateur a déjà une critique
-    if Review.objects.filter(ticket=ticket, user=request.user).exists():
-        return redirect("view_ticket", ticket.id)
+    # ✅ Vérifie si l’auteur du ticket a bloqué l’utilisateur courant
+    if UserBlock.objects.filter(user=ticket.user, blocked_user=request.user).exists():
+        messages.error(request, "❌ Vous ne pouvez pas répondre à ce ticket.")
+        return redirect("home")
+
+    # ✅ Vérifie si le ticket a déjà une critique
+    if Review.objects.filter(ticket=ticket).exists():
+        messages.error(request, "❌ Ce ticket a déjà une critique.<br>Vous ne pouvez pas en ajouter une autre.")
+        next_url = request.GET.get("next", "home")
+        return redirect(next_url)
 
     if request.method == "POST":
         form = ReviewForm(request.POST)
@@ -67,9 +81,9 @@ def create_review_response(request, ticket_id):
             review.user = request.user
             review.ticket = ticket
             review.save()
-
-            next_url = request.POST.get("next")
-            return redirect(next_url or "user_posts")
+            messages.success(request, "✅ Votre critique a bien été publiée.")
+            next_url = request.POST.get("next") or request.GET.get("next") or "home"
+            return redirect(next_url)
     else:
         form = ReviewForm()
 
