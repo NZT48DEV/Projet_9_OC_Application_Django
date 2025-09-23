@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from . import forms, models
-from tickets.models import Ticket
+from tickets.models import Ticket, Image
 from tickets.forms import TicketForm, ImageForm
 from reviews.models import Review
 from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
@@ -10,13 +10,11 @@ from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
 
 @login_required
 def home(request):
-    images = models.Image.objects.all()
-    tickets = models.Ticket.objects.all()
+    tickets = Ticket.objects.all()
     return render(request, 'tickets/home.html', {
-        'images': images,
         'tickets': tickets,
-        'read_only': True,                   # lecture seule
-        'next': request.GET.get("next", ""), # pour naviguer proprement
+        'read_only': True,
+        'next': request.GET.get("next", ""),
     })
 
 
@@ -33,33 +31,37 @@ def image_upload(request):
             return redirect(next_url or 'home')
     return render(request, 'tickets/image_upload.html', {
         'form': form,
-        'read_only': False,                  # on est en création
+        'read_only': False,
         'next': request.GET.get("next", ""),
     })
 
 
 @login_required
 def create_ticket(request):
-    ticket_form = forms.TicketForm()
-    image_form = forms.ImageForm()
+    ticket_form = TicketForm()
+    image_form = ImageForm()
     if request.method == 'POST':
-        ticket_form = forms.TicketForm(request.POST)
-        image_form = forms.ImageForm(request.POST, request.FILES)
+        ticket_form = TicketForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
         if ticket_form.is_valid() and image_form.is_valid():
+            # Création du ticket
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+
+            # Création de l’image liée
             image = image_form.save(commit=False)
             image.uploader = request.user
+            image.ticket = ticket
             image.save()
-            ticket = ticket_form.save(commit=False)
-            ticket.image = image
-            ticket.user = request.user  # ⚠ champ correct
-            ticket.save()
+
             messages.success(request, "✅ Votre ticket a bien été créé.")
             next_url = request.POST.get("next")
             return redirect(next_url or 'home')
     return render(request, 'tickets/create_ticket.html', {
         'ticket_form': ticket_form,
         'image_form': image_form,
-        'read_only': False,                  # on est en création
+        'read_only': False,
         'next': request.GET.get("next", ""),
     })
 
@@ -73,19 +75,16 @@ def view_ticket(request, ticket_id):
         messages.error(request, "❌ Ce ticket n'est pas disponible.")
         return redirect("home")
 
-    # Toutes les critiques liées à ce ticket
     reviews = Review.objects.filter(ticket=ticket)
-
-    # La critique spécifique de l'utilisateur connecté (s'il en a fait une)
     user_review = reviews.filter(user=request.user).first()
 
     return render(request, "tickets/view_ticket.html", {
         "ticket": ticket,
         "reviews": reviews,
         "user_review": user_review,
-        "hide_ticket": True,                   # tu gardes ta logique
-        "read_only": True,                     # page de lecture seule
-        "next": request.GET.get("next", ""),   # pour pouvoir revenir facilement
+        "hide_ticket": True,
+        "read_only": True,
+        "next": request.GET.get("next", ""),
     })
 
 
@@ -93,18 +92,17 @@ def view_ticket(request, ticket_id):
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
-    # ✅ Pas besoin de vérifier blocage ici car seul l'auteur peut supprimer
     if request.method == "POST":
-        next_url = request.POST.get("next")  # récupère next du formulaire
+        next_url = request.POST.get("next")
         ticket.delete()
         messages.success(request, "✅ Votre ticket a bien été supprimé.")
-        return redirect(next_url or "user_posts")  # fallback si pas de next
+        return redirect(next_url or "user_posts")
 
     return render(request, 'tickets/delete_ticket.html', {
         "ticket": ticket,
-        "review": None,                
-        "read_only": True,             
-        "next": request.GET.get("next", ""),  
+        "review": None,
+        "read_only": True,
+        "next": request.GET.get("next", ""),
     })
 
 
@@ -112,21 +110,27 @@ def delete_ticket(request, ticket_id):
 def update_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
-    # ✅ Pas besoin de vérifier blocage ici non plus car seul l'auteur peut modifier
+    # ✅ Vérifie si une image existe déjà
+    try:
+        image_instance = ticket.image
+    except Image.DoesNotExist:
+        image_instance = None
+
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, instance=ticket)
-        image_form = ImageForm(request.POST, request.FILES, instance=ticket.image)
+        image_form = ImageForm(request.POST, request.FILES, instance=image_instance)
 
         if ticket_form.is_valid() and image_form.is_valid():
-            # Mise à jour de l'image
-            image = image_form.save(commit=False)
-            image.uploader = request.user
-            image.save()
-
             # Mise à jour du ticket
             updated_ticket = ticket_form.save(commit=False)
-            updated_ticket.image = image
+            updated_ticket.user = request.user
             updated_ticket.save()
+
+            # Mise à jour ou création de l’image
+            image = image_form.save(commit=False)
+            image.uploader = request.user
+            image.ticket = updated_ticket
+            image.save()
 
             messages.success(request, "✅ Votre ticket a bien été modifié.")
             next_url = request.POST.get("next")
@@ -134,13 +138,13 @@ def update_ticket(request, ticket_id):
 
     else:
         ticket_form = TicketForm(instance=ticket)
-        image_form = ImageForm(instance=ticket.image)
+        image_form = ImageForm(instance=image_instance)
 
     return render(request, 'tickets/update_ticket.html', {
         'ticket_form': ticket_form,
         'image_form': image_form,
         'ticket': ticket,
-        "review": None,           # tu gardes ta logique initiale
-        "read_only": False,       # important pour tes partials
-        "next": request.GET.get("next", ""),  # next pour revenir à la bonne page
+        "review": None,
+        "read_only": False,
+        "next": request.GET.get("next", ""),
     })

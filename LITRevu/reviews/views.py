@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from tickets.forms import TicketForm, ImageForm
 from reviews.forms import ReviewForm
 from reviews.models import Review
-from tickets.models import Ticket
-from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
+from tickets.models import Ticket, Image
+from userfollows.models import UserBlock
 
 
 @login_required
@@ -28,17 +28,19 @@ def create_review_with_ticket(request):
         review_form = ReviewForm(request.POST)
 
         if ticket_form.is_valid() and image_form.is_valid() and review_form.is_valid():
+            # Création du ticket
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
+            ticket.save()
 
+            # Création de l'image (si uploadée)
             if image_form.cleaned_data.get("image"):
                 image = image_form.save(commit=False)
                 image.uploader = request.user
+                image.ticket = ticket
                 image.save()
-                ticket.image = image
 
-            ticket.save()
-
+            # Création de la critique
             review = review_form.save(commit=False)
             review.user = request.user
             review.ticket = ticket
@@ -119,7 +121,6 @@ def update_review(request, review_id):
         if form.is_valid():
             form.save()
             messages.success(request, "✅ Votre critique a bien été modifiée.")
-
             next_url = request.POST.get("next")
             return redirect(next_url or "user_posts")
     else:
@@ -137,6 +138,12 @@ def update_review_with_ticket(request, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
     ticket = review.ticket
 
+    # ✅ Gérer le cas où le ticket n’a pas d’image
+    try:
+        image_instance = ticket.image
+    except Image.DoesNotExist:
+        image_instance = None
+
     if request.method == "POST":
         if "delete_review" in request.POST:
             review.delete()
@@ -152,21 +159,23 @@ def update_review_with_ticket(request, review_id):
 
         # Sinon → bouton Enregistrer
         ticket_form = TicketForm(request.POST, instance=ticket)
-        image_form = ImageForm(request.POST, request.FILES, instance=ticket.image if ticket.image else None)
+        image_form = ImageForm(request.POST, request.FILES, instance=image_instance)
         review_form = ReviewForm(request.POST, instance=review)
 
         if ticket_form.is_valid() and image_form.is_valid() and review_form.is_valid():
+            # Sauvegarde ticket
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
+            ticket.save()
 
+            # Sauvegarde image
             if image_form.cleaned_data.get("image"):
                 image = image_form.save(commit=False)
                 image.uploader = request.user
+                image.ticket = ticket
                 image.save()
-                ticket.image = image
 
-            ticket.save()
-
+            # Sauvegarde critique
             review = review_form.save(commit=False)
             review.user = request.user
             review.ticket = ticket
@@ -177,7 +186,7 @@ def update_review_with_ticket(request, review_id):
             return redirect(next_url or "user_posts")
     else:
         ticket_form = TicketForm(instance=ticket)
-        image_form = ImageForm(instance=ticket.image if ticket.image else None)
+        image_form = ImageForm(instance=image_instance)
         review_form = ReviewForm(instance=review)
 
     return render(request, "reviews/update_review_with_ticket.html", {
