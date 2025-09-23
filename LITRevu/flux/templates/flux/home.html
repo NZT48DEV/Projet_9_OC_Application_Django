@@ -4,31 +4,32 @@
 
 <div class="container mt-4">
 
-    <!-- Boutons haut de page -->
-    <div class="d-flex justify-content-center gap-4 mb-5">
-        <a href="{% url 'create_ticket' %}" class="btn btn-outline-primary btn-lg rounded-pill">
-            📚 Demander une critique
-        </a>
-        <a href="{% url 'create_review_with_ticket' %}" class="btn btn-outline-success btn-lg rounded-pill">
-            ✍️ Créer une critique
-        </a>
+    <!-- ✅ Bloc encadré avec ombre pour les actions -->
+    <div class="card p-4 mb-5 text-center shadow-sm">
+        <!-- Boutons haut de page -->
+        <div class="d-flex justify-content-center gap-4 mb-4">
+            <a href="{% url 'create_ticket' %}" class="btn btn-outline-primary btn-lg rounded-pill">
+                📚 Demander une critique
+            </a>
+            <a href="{% url 'create_review_with_ticket' %}" class="btn btn-outline-success btn-lg rounded-pill">
+                ✍️ Créer une critique
+            </a>
+        </div>
+
+        <!-- Onglets filtre -->
+        <ul class="nav nav-pills justify-content-center">
+            <li class="nav-item">
+                <a href="?filter=all" class="nav-link {% if filter_mode == 'all' %}active{% endif %}">
+                    Tous les posts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="?filter=following" class="nav-link {% if filter_mode == 'following' %}active{% endif %}">
+                    Mes abonnements
+                </a>
+            </li>
+        </ul>
     </div>
-
-    <!-- Onglets filtre -->
-    <ul class="nav nav-pills justify-content-center mb-4">
-        <li class="nav-item">
-            <a href="?filter=all" class="nav-link {% if filter_mode == 'all' %}active{% endif %}">
-                Tous les posts
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="?filter=following" class="nav-link {% if filter_mode == 'following' %}active{% endif %}">
-                Mes abonnements
-            </a>
-        </li>
-    </ul>
-
-    <hr class="mb-4">
 
     <!-- Flux -->
     {% if tickets %}
@@ -41,12 +42,12 @@
                 <!-- Critiques associées -->
                 {% if ticket.review_set.all %}
                     {% for review in ticket.review_set.all %}
-                        <div class="card bg-light p-3 mt-3">
+                        <div class="card bg-light p-3 mt-3 border-0 shadow-sm">
                             {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
                         </div>
                     {% endfor %}
                 {% else %}
-                    <div class="card bg-light p-3 mt-3">
+                    <div class="card bg-light p-3 mt-3 border-secondary shadow-sm">
                         <p class="text-muted mb-0">Aucune critique pour le moment.</p>
                     </div>
                 {% endif %}

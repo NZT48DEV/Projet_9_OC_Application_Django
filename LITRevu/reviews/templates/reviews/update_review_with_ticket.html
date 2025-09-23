@@ -1,44 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Modifier le ticket et la critique</h2>
+    <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 800px;">
+        <div class="card-body p-4">
+            <h2 class="text-center mb-4">✏️ Modifier le ticket et la critique</h2>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">  <!-- ✅ Champ caché -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">  <!-- ✅ Champ caché -->
 
-        <h3>Livre/Article</h3>
-        {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form ticket=ticket %}
+                <!-- Bloc Ticket -->
+                <h4 class="fw-bold mb-3">📚 Livre / Article</h4>
+                <div class="card card-elevated mb-4">
+                    <div class="card-body">
+                        {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form ticket=ticket %}
+                    </div>
+                </div>
 
-        <hr>
+                <!-- Bloc Review -->
+                <h4 class="fw-bold mb-3">✍️ Critique</h4>
+                <div class="card card-elevated mb-4">
+                    <div class="card-body">
+                        {% include "reviews/partials/_review_form.html" with review_form=review_form %}
+                    </div>
+                </div>
 
-        <h3>Critique</h3>
-        {% include "reviews/partials/_review_form.html" with review_form=review_form %}
+                <!-- Boutons d’action -->
+                <div class="d-flex flex-column align-items-end mt-4 gap-2">
+                    <!-- Bouton enregistrer -->
+                    <button type="submit" class="btn btn-success w-auto">
+                        <i class="bi bi-check-circle-fill"></i> Enregistrer
+                    </button>
 
-        <!-- Bloc boutons alignés à droite, empilés verticalement -->
-        <div class="d-flex flex-column align-items-end mt-4 gap-2">
-            <!-- Bouton enregistrer -->
-            <button type="submit" class="btn btn-success w-auto">
-                Enregistrer
-            </button>
+                    <!-- Bouton supprimer critique -->
+                    <button type="submit" name="delete_review" class="btn btn-outline-danger w-auto"
+                            onclick="return confirm('Voulez-vous vraiment supprimer uniquement la critique ?');">
+                        <i class="bi bi-trash"></i> Supprimer la critique
+                    </button>
 
-            <!-- Bouton supprimer critique -->
-            <button type="submit" name="delete_review" class="btn btn-danger w-auto"
-                    onclick="return confirm('Voulez-vous vraiment supprimer uniquement la critique ?');">
-                Supprimer la critique
-            </button>
+                    <!-- Bouton supprimer ticket -->
+                    <button type="submit" name="delete_ticket" class="btn btn-danger w-auto"
+                            onclick="return confirm('Voulez-vous vraiment supprimer le ticket ET la critique ?');">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Supprimer le ticket
+                    </button>
 
-            <!-- Bouton supprimer ticket -->
-            <button type="submit" name="delete_ticket" class="btn btn-danger w-auto"
-                    onclick="return confirm('Voulez-vous vraiment supprimer le ticket ET la critique ?');">
-                Supprimer le ticket
-            </button>
-
-            <!-- Bouton annuler -->
-            <a href="{{ next|default:'/' }}" class="btn btn-secondary w-auto">
-                Annuler
-            </a>
+                    <!-- Bouton annuler -->
+                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary w-auto">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

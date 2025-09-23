@@ -1,55 +1,71 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Modifier votre critique</h2>
+    <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 800px;">
+        <div class="card-body p-4">
+            <h2 class="text-center mb-4">✏️ Modifier votre critique</h2>
 
-    {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket message="Vous êtes en train de modifier votre critique en réponse à" %}
-
-    <!-- Formulaire critique -->
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        <fieldset class="border p-3">
-            <legend class="w-auto">Critique</legend>
-
-            <div class="mb-3">
-                {{ form.headline.label_tag }}
-                {{ form.headline }}
-            </div>
-
-            <div class="mb-3">
-                {{ form.rating.label_tag }}
-                <div>
-                    {% for radio in form.rating %}
-                        <div class="form-check form-check-inline">
-                            {{ radio.tag }}
-                            <label class="form-check-label" for="{{ radio.id_for_label }}">
-                                {{ radio.choice_label }}
-                            </label>
-                        </div>
-                    {% endfor %}
+            <!-- Ticket associé en contexte -->
+            <div class="card card-elevated mb-4">
+                <div class="card-body">
+                    {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket message="Vous modifiez votre critique en réponse à" %}
                 </div>
             </div>
 
-            <div class="mb-3">
-                {{ form.body.label_tag }}
-                {{ form.body }}
-            </div>
+            <!-- Formulaire de la critique -->
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
 
-            <div class="text-end">
-                <button type="submit" class="btn btn-success">Enregistrer</button>
-                <a href="{% url 'view_review' review.id %}" class="btn btn-secondary">Annuler</a>
+                <h4 class="fw-bold mb-3">✍️ Critique</h4>
+                <div class="card card-elevated mb-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form.headline.label_tag }}
+                            {{ form.headline }}
+                        </div>
 
-            </div>
+                        <div class="mb-3">
+                            {{ form.rating.label_tag }}
+                            <div>
+                                {% for radio in form.rating %}
+                                    <div class="form-check form-check-inline">
+                                        {{ radio.tag }}
+                                        <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                            {{ radio.choice_label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
 
-            <div class="text-end mt-3">
-                <button type="submit" name="delete_review" class="btn btn-danger w-auto"
-                    onclick="return confirm('Voulez-vous vraiment supprimer uniquement la critique ?');">
-                Supprimer la critique
-                </button>
-            </div>
+                        <div class="mb-3">
+                            {{ form.body.label_tag }}
+                            {{ form.body }}
+                        </div>
+                    </div>
+                </div>
 
-        </fieldset>
-    </form>
+                <!-- Boutons -->
+                <div class="d-flex flex-column align-items-end gap-2">
+                    <!-- Enregistrer -->
+                    <button type="submit" class="btn btn-success w-auto">
+                        <i class="bi bi-check-circle-fill"></i> Enregistrer
+                    </button>
+
+                    <!-- Supprimer critique -->
+                    <button type="submit" name="delete_review" class="btn btn-danger w-auto"
+                            onclick="return confirm('Voulez-vous vraiment supprimer cette critique ?');">
+                        <i class="bi bi-trash"></i> Supprimer la critique
+                    </button>
+
+                    <!-- Annuler -->
+                    <a href="{% url 'view_review' review.id %}" class="btn btn-outline-secondary w-auto">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock content %}

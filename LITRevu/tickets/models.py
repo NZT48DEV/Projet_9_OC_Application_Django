@@ -37,7 +37,7 @@ class Ticket(models.Model):
         blank=False
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL, blank=True)
+    image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)
     
 

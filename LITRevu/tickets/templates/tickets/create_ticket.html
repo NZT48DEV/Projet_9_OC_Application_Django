@@ -3,20 +3,20 @@
 <div class="container mt-5">
     <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 700px;">
         <div class="card-body p-4">
-            <h2 class="text-center mb-4">🎟️ Créer un ticket</h2>
+            <h2 class="text-center mb-4">📚 Demander une critique</h2>
 
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% include "tickets/partials/_ticket_form.html" %}
 
                 <!-- Zone boutons -->
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary btn-lg">
-                        <i class="bi bi-x-circle"></i> Annuler
-                    </a>
+                <div class="text-end mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-send-fill"></i> Envoyer
                     </button>
+                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
                 </div>
             </form>
         </div>

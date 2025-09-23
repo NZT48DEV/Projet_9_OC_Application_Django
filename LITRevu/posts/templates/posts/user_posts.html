@@ -32,14 +32,22 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        <div class="card bg-light p-3 mt-3">
+                        <div class="card bg-light p-3 mt-3 border-secondary shadow-sm">
                             <p class="text-muted mb-0">Aucune critique pour le moment.</p>
+                        </div>
+                    {% endif %}
+                    {% if not post.review_set.exists %}
+                        <div class="text-end">
+                            <a href="{% url 'create_review_response' post.id %}" class="btn btn-success mt-3">
+                                ➕ Ajouter une critique
+                            </a>
                         </div>
                     {% endif %}
                 </div>
             {% endif %}
         {% endfor %}
     {% else %}
+
         <!-- Message vide -->
         <div class="card text-center shadow-sm border-0 bg-light p-5 mt-4">
             <div class="mb-3">

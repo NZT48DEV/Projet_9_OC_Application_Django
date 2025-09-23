@@ -1,78 +1,96 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% block content %}
-<div class="container">
-    <h3 class="mb-3">{{ ticket.get_type_display }}</h3>
+<div class="container mt-4">
 
-    <div class="card mb-4 p-3">
-        <!-- Header (auteur + date) -->
-        <div class="d-flex justify-content-between">
-            <p>
+    <!-- ✅ Carte détaillée du ticket -->
+    <div class="card card-elevated p-4 mb-5">
+        <!-- Header -->
+        <div class="d-flex justify-content-between mb-3">
+            <p class="mb-0 text-muted fst-italic">
                 {% if request.user == ticket.user %}
-                    <em>Vous avez publié ce ticket</em>
+                    Vous avez publié ce ticket
                 {% else %}
-                    <strong>{{ ticket.user.username }}</strong> a publié ce ticket
+                    {{ ticket.user.username }} a publié ce ticket
                 {% endif %}
             </p>
-            <small class="text-muted">{{ ticket.time_created|date:"H:i, d M Y" }}</small>
+            <small class="text-muted">
+                <i class="bi bi-clock"></i> {{ ticket.time_created|format_date }}
+            </small>
         </div>
 
         <!-- Contenu -->
-        <h2 class="card-title">{{ ticket.title }}</h2>
-        <p class="card-text">{{ ticket.description|linebreaksbr }}</p>
+        <div class="text-center mb-3">
+            <h3 class="fw-bold mb-3">{{ ticket.title }}</h3>
+            <p class="lead text-muted">{{ ticket.description|linebreaksbr }}</p>
 
-        {% if ticket.image %}
-            <img src="{{ ticket.image.image.url }}" alt="image du ticket" class="img-fluid rounded mb-3" style="max-width:250px;">
-        {% endif %}
+            {% if ticket.image %}
+                <div class="my-4">
+                    <img src="{{ ticket.image.image.url }}" 
+                         alt="image du ticket" 
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 400px; object-fit: contain;">
+                </div>
+            {% endif %}
+        </div>
 
         <!-- Boutons si c'est l'utilisateur -->
         {% if request.user == ticket.user %}
-            <div class="text-start">
-                <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
-                    Modifier le ticket
+            <div class="d-flex justify-content-end mt-3 gap-2">
+                <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" 
+                   class="btn btn-outline-warning btn-sm">
+                   <i class="bi bi-pencil-square"></i> Modifier
                 </a>
-                <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
-                    Supprimer le ticket
+                <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" 
+                   class="btn btn-outline-danger btn-sm">
+                   <i class="bi bi-trash"></i> Supprimer
                 </a>
             </div>
         {% endif %}
     </div>
 
-    <h3 class="mb-3">Critique(s)</h3>
-
+    <!-- ✅ Bloc critiques -->
     {% if reviews %}
         {% for review in reviews %}
-            <div class="card bg-light p-3 mb-3">
-                {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
-                
-                {% if review.user == request.user %}
-                    <div class="text-start mt-2">
-                        <a href="{% url 'update_review' review.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
+            <div class="card card-elevated border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-3">Critique associée</h5>
+                <div class="card bg-light border p-3">
+                    {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+                    
+                    {% if review.user == request.user %}
+                        <div class="text-end mt-2">
+                            <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
+                            class="btn btn-outline-warning btn-sm me-2">
                             Modifier la critique
-                        </a>
-                        <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
+                            </a>
+                            <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
+                            class="btn btn-outline-danger btn-sm">
                             Supprimer la critique
-                        </a>
-                    </div>
-                {% endif %}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     {% else %}
-        <p class="text-muted">Aucune critique pour le moment.</p>
+        <div class="card bg-light p-3 mt-3 border-secondary shadow-sm">
+            <p class="text-muted mb-0">Aucune critique pour le moment.</p>
+        </div>
     {% endif %}
 
-    {% if not user_review %}
-    <div class="text-start">
-        <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
-            Ajouter une critique
-        </a>
-    </div>
-
+    {% if not ticket.review_set.exists %}
+        <div class="text-end">
+            <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
+                ➕ Ajouter une critique
+            </a>
+        </div>
     {% endif %}
 
+    <!-- ✅ Bouton retour -->
     <div class="text-center">
-        <a href="{% url 'home' %}" class="btn btn-primary me-2">Flux</a>
-        <a href="{% url 'user_posts' %}" class="btn btn-secondary me-2">Posts</a>
+        <a href="{{ next|default:'/' }}" class="btn btn-secondary btn-lg mt-4 mb-4">
+            <i class="bi bi-x-circle"></i> Retour
+        </a>
     </div>
 </div>
 {% endblock %}

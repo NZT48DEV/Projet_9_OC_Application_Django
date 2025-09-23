@@ -34,17 +34,27 @@
             {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket review=True read_only=True %}
         </div>
     {% endif %}
-
-    <!-- Boutons (uniquement si critique appartient à l’utilisateur connecté ET pas en read_only) -->
-    {% if not read_only and review.user == request.user %}
-        <div class="d-flex justify-content-end">
-                <!-- Cas où le ticket appartient à quelqu’un d’autre -->
-                <a href="{% url 'update_review' review.id %}?next={{ request.path }}" class="btn btn-warning btn-sm me-2">
-                    Modifier la critique
+    
+    <div class="d-flex justify-content-end mt-3">
+        <a href="{% url 'view_review' review.id %}" 
+            class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-eye"></i> Voir la critique
+        </a>
+        <!-- Boutons (uniquement si critique appartient à l’utilisateur connecté ET pas en read_only) -->
+        {% if not read_only and review.user == request.user %}
+            
+                <!-- Bouton Modifier -->
+                <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
+                class="btn btn-outline-warning btn-sm me-2">
+                    <i class="bi bi-pencil-square"></i> Modifier la critique
                 </a>
-                <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" class="btn btn-danger btn-sm">
-                    Supprimer la critique
+                
+                <!-- Bouton Supprimer -->
+                <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
+                class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash"></i> Supprimer la critique
                 </a>
-        </div>
-    {% endif %}
+            
+        {% endif %}
+    </div>
 </div>
