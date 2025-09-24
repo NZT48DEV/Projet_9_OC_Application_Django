@@ -1,34 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-5">
+<div class="container mb-5" role="main">
     <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 800px;">
         <div class="card-body p-4">
-            <h2 class="text-center mb-4">✍️ Créer une critique</h2>
+            <h1 class="text-center mb-4 fs-3">✍️ Créer une critique</h1>
 
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" role="form" aria-label="Formulaire de création critique + ticket">
                 {% csrf_token %}
                 {{ ticket_form.non_field_errors }}
                 {{ review_form.non_field_errors }}
 
-                <!-- Champ caché pour conserver la page précédente -->
-                <input type="hidden" name="next" value="{{ next }}">
-
-                <!-- Formulaire du ticket -->
                 <h4 class="fw-bold mb-3">📚 Livre / Article</h4>
-                {% include "tickets/partials/_ticket_form.html" with form=ticket_form image_form=image_form %}
+                {% include "tickets/partials/_ticket_form.html" with ticket_form=ticket_form image_form=image_form %}
 
                 <hr class="my-4">
 
-                <!-- Formulaire de la critique -->
                 <h4 class="fw-bold mb-3">📝 Critique</h4>
-                {% include "reviews/partials/_review_form.html" with form=review_form %}
+                {% include "reviews/partials/_review_form.html" with review_form=review_form %}
 
-                <!-- Zone boutons -->
                 <div class="text-end mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-send-fill"></i> Envoyer
                     </button>
-                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary btn-lg">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
                         <i class="bi bi-x-circle"></i> Annuler
                     </a>
                 </div>
@@ -36,4 +30,4 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}

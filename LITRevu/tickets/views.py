@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from . import forms, models
 from tickets.models import Ticket, Image
 from tickets.forms import TicketForm, ImageForm
@@ -11,28 +13,26 @@ from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
 @login_required
 def home(request):
     tickets = Ticket.objects.all()
-    return render(request, 'tickets/home.html', {
-        'tickets': tickets,
-        'read_only': True,
-        'next': request.GET.get("next", ""),
+    return render(request, "tickets/home.html", {
+        "tickets": tickets,
+        "read_only": True,
     })
 
 
 @login_required
 def image_upload(request):
     form = forms.ImageForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         form = forms.ImageForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save(commit=False)
             image.uploader = request.user
             image.save()
-            next_url = request.POST.get("next")
-            return redirect(next_url or 'home')
-    return render(request, 'tickets/image_upload.html', {
-        'form': form,
-        'read_only': False,
-        'next': request.GET.get("next", ""),
+            messages.success(request, "✅ Image téléchargée avec succès.")
+            return redirect("home")
+    return render(request, "tickets/image_upload.html", {
+        "form": form,
+        "read_only": False,
     })
 
 
@@ -40,7 +40,7 @@ def image_upload(request):
 def create_ticket(request):
     ticket_form = TicketForm()
     image_form = ImageForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         ticket_form = TicketForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
         if ticket_form.is_valid() and image_form.is_valid():
@@ -49,20 +49,19 @@ def create_ticket(request):
             ticket.user = request.user
             ticket.save()
 
-            # Création de l’image liée
-            image = image_form.save(commit=False)
-            image.uploader = request.user
-            image.ticket = ticket
-            image.save()
+            # Création de l’image liée (si uploadée)
+            if image_form.cleaned_data.get("image"):
+                image = image_form.save(commit=False)
+                image.uploader = request.user
+                image.ticket = ticket
+                image.save()
 
             messages.success(request, "✅ Votre ticket a bien été créé.")
-            next_url = request.POST.get("next")
-            return redirect(next_url or 'home')
-    return render(request, 'tickets/create_ticket.html', {
-        'ticket_form': ticket_form,
-        'image_form': image_form,
-        'read_only': False,
-        'next': request.GET.get("next", ""),
+            return redirect("home")
+    return render(request, "tickets/create_ticket.html", {
+        "ticket_form": ticket_form,
+        "image_form": image_form,
+        "read_only": False,
     })
 
 
@@ -84,7 +83,6 @@ def view_ticket(request, ticket_id):
         "user_review": user_review,
         "hide_ticket": True,
         "read_only": True,
-        "next": request.GET.get("next", ""),
     })
 
 
@@ -93,16 +91,14 @@ def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == "POST":
-        next_url = request.POST.get("next")
         ticket.delete()
         messages.success(request, "✅ Votre ticket a bien été supprimé.")
-        return redirect(next_url or "user_posts")
+        return redirect("home")
 
-    return render(request, 'tickets/delete_ticket.html', {
+    return render(request, "tickets/delete_ticket.html", {
         "ticket": ticket,
         "review": None,
         "read_only": True,
-        "next": request.GET.get("next", ""),
     })
 
 
@@ -116,7 +112,7 @@ def update_ticket(request, ticket_id):
     except Image.DoesNotExist:
         image_instance = None
 
-    if request.method == 'POST':
+    if request.method == "POST":
         ticket_form = TicketForm(request.POST, instance=ticket)
         image_form = ImageForm(request.POST, request.FILES, instance=image_instance)
 
@@ -127,24 +123,22 @@ def update_ticket(request, ticket_id):
             updated_ticket.save()
 
             # Mise à jour ou création de l’image
-            image = image_form.save(commit=False)
-            image.uploader = request.user
-            image.ticket = updated_ticket
-            image.save()
+            if image_form.cleaned_data.get("image"):
+                image = image_form.save(commit=False)
+                image.uploader = request.user
+                image.ticket = updated_ticket
+                image.save()
 
             messages.success(request, "✅ Votre ticket a bien été modifié.")
-            next_url = request.POST.get("next")
-            return redirect(next_url or "view_ticket", ticket_id=updated_ticket.pk)
-
+            return redirect("view_ticket", ticket_id=updated_ticket.pk)
     else:
         ticket_form = TicketForm(instance=ticket)
         image_form = ImageForm(instance=image_instance)
 
-    return render(request, 'tickets/update_ticket.html', {
-        'ticket_form': ticket_form,
-        'image_form': image_form,
-        'ticket': ticket,
+    return render(request, "tickets/update_ticket.html", {
+        "ticket_form": ticket_form,
+        "image_form": image_form,
+        "ticket": ticket,
         "review": None,
         "read_only": False,
-        "next": request.GET.get("next", ""),
     })

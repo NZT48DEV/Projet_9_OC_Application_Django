@@ -21,3 +21,16 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
+
+.ticket-body.clamp,
+.review-body.clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    text-align: left;
+    max-width: 100%;
+}

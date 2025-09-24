@@ -1,14 +1,17 @@
-<div class="card p-2 mt-3 bg-light shadow-sm border-0">
+<div class="card p-2 mt-3 bg-light shadow-sm border-0" aria-labelledby="mini-ticket-title-{{ ticket.id }}">
     <div class="d-flex justify-content-between mb-1">
         <p class="mb-1 fw-bold">🎟️ Ticket - {{ ticket.user.username }}</p>
-        <small class="text-muted">{{ ticket.time_created|date:"H:i, d F Y" }}</small>
+        <small class="text-muted">
+            <i class="bi bi-clock" aria-hidden="true"></i> {{ ticket.time_created|date:"H:i, d F Y" }}
+        </small>
     </div>
 
-    <h6 class="mb-1">{{ ticket.title }}</h6>
+    <h6 id="mini-ticket-title-{{ ticket.id }}" class="mb-1">{{ ticket.title }}</h6>
     <p class="mb-2">{{ ticket.description }}</p>
 
     {% if ticket.image %}
         <img src="{{ ticket.image.image.url }}" 
+             alt="Miniature du ticket {{ ticket.title }}" 
              class="img-thumbnail" 
              style="max-width:120px; height:auto;">
     {% endif %}

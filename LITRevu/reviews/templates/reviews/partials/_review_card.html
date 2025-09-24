@@ -1,60 +1,8 @@
-{% load custom_filters %}
+<div class="card p-4 shadow-sm border-0 mb-4" aria-labelledby="review-title-{{ review.id }}">
+    {% include "reviews/partials/_review_card_header.html" with review=review %}
+    {% include "reviews/partials/_review_card_body.html" with review=review %}
 
-<div class="card mb-3 p-3">
-    <!-- Header -->
-    <div class="d-flex justify-content-between">
-        <p>
-            {% if review.user == request.user %}
-                <em>Vous avez publié une critique</em>
-            {% else %}
-                <strong>{{ review.user.username }}</strong> a publié une critique
-            {% endif %}
-        </p>
-        <small class="text-muted">{{ review.time_created|format_date }}</small>
-    </div>
-
-    <!-- Titre + étoiles -->
-    <h5>
-        {{ review.headline }}
-        {% for i in "12345" %}
-            {% if forloop.counter <= review.rating %}
-                <span style="color: gold;">★</span>
-            {% else %}
-                <span style="color: lightgray;">☆</span>
-            {% endif %}
-        {% endfor %}
-    </h5>
-
-    <!-- Corps -->
-    <p>{{ review.body|linebreaksbr }}</p>
-
-    {% if not hide_ticket %}
-        <!-- Ticket associé (sauf si on masque volontairement) -->
-        <div class="card bg-light p-3 mb-3">
-            {% include "tickets/partials/_ticket_card.html" with ticket=review.ticket review=True read_only=True %}
-        </div>
+    {% if not read_only %}
+        {% include "reviews/partials/_review_card_actions.html" with review=review %}
     {% endif %}
-    
-    <div class="d-flex justify-content-end mt-3">
-        <a href="{% url 'view_review' review.id %}" 
-            class="btn btn-outline-primary btn-sm me-2">
-            <i class="bi bi-eye"></i> Voir la critique
-        </a>
-        <!-- Boutons (uniquement si critique appartient à l’utilisateur connecté ET pas en read_only) -->
-        {% if not read_only and review.user == request.user %}
-            
-                <!-- Bouton Modifier -->
-                <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
-                class="btn btn-outline-warning btn-sm me-2">
-                    <i class="bi bi-pencil-square"></i> Modifier la critique
-                </a>
-                
-                <!-- Bouton Supprimer -->
-                <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
-                class="btn btn-outline-danger btn-sm">
-                    <i class="bi bi-trash"></i> Supprimer la critique
-                </a>
-            
-        {% endif %}
-    </div>
 </div>

@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% block title %}{{ ticket.title }} - LITRevu{% endblock title %}
+
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4" role="main">
 
     <!-- ✅ Carte détaillée du ticket -->
-    <div class="card card-elevated p-4 mb-5">
+    <div class="card card-elevated p-4 mb-5" aria-labelledby="ticket-title">
         <!-- Header -->
         <div class="d-flex justify-content-between mb-3">
             <p class="mb-0 text-muted fst-italic">
@@ -15,19 +17,19 @@
                 {% endif %}
             </p>
             <small class="text-muted">
-                <i class="bi bi-clock"></i> {{ ticket.time_created|format_date }}
+                <i class="bi bi-clock" aria-hidden="true"></i> {{ ticket.time_created|format_date }}
             </small>
         </div>
 
         <!-- Contenu -->
         <div class="text-center mb-3">
-            <h3 class="fw-bold mb-3">{{ ticket.title }}</h3>
+            <h2 id="ticket-title" class="fw-bold mb-3">{{ ticket.title }}</h2>
             <p class="lead text-muted">{{ ticket.description|linebreaksbr }}</p>
 
             {% if ticket.image %}
                 <div class="my-4">
                     <img src="{{ ticket.image.image.url }}" 
-                         alt="image du ticket" 
+                         alt="Illustration du ticket : {{ ticket.title }}" 
                          class="img-fluid rounded shadow-sm"
                          style="max-height: 400px; object-fit: contain;">
                 </div>
@@ -37,13 +39,17 @@
         <!-- Boutons si c'est l'utilisateur -->
         {% if request.user == ticket.user %}
             <div class="d-flex justify-content-end mt-3 gap-2">
-                <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" 
-                   class="btn btn-outline-warning btn-sm">
-                   <i class="bi bi-pencil-square"></i> Modifier
+                <!-- Update → retour direct sur la page du ticket -->
+                <a href="{% url 'update_ticket' ticket.id %}"
+                   class="btn btn-outline-warning btn-sm"
+                   aria-label="Modifier le ticket {{ ticket.title }}">
+                   <i class="bi bi-pencil-square" aria-hidden="true"></i> Modifier
                 </a>
-                <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" 
-                   class="btn btn-outline-danger btn-sm">
-                   <i class="bi bi-trash"></i> Supprimer
+                <!-- Delete → retour flux -->
+                <a href="{% url 'delete_ticket' ticket.id %}"
+                   class="btn btn-outline-danger btn-sm"
+                   aria-label="Supprimer le ticket {{ ticket.title }}">
+                   <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
                 </a>
             </div>
         {% endif %}
@@ -52,20 +58,22 @@
     <!-- ✅ Bloc critiques -->
     {% if reviews %}
         {% for review in reviews %}
-            <div class="card card-elevated border-0 shadow-sm p-4">
-                <h5 class="fw-bold mb-3">Critique associée</h5>
+            <div class="card card-elevated border-0 shadow-sm p-4 mb-3" aria-label="Critique associée">
+                <h3 class="fw-bold mb-3 fs-5">Critique associée</h3>
                 <div class="card bg-light border p-3">
                     {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
                     
                     {% if review.user == request.user %}
                         <div class="text-end mt-2">
-                            <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
-                            class="btn btn-outline-warning btn-sm me-2">
-                            Modifier la critique
+                            <a href="{% url 'update_review' review.id %}" 
+                               class="btn btn-outline-warning btn-sm me-2"
+                               aria-label="Modifier la critique associée">
+                                <i class="bi bi-pencil-square" aria-hidden="true"></i> Modifier
                             </a>
-                            <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
-                            class="btn btn-outline-danger btn-sm">
-                            Supprimer la critique
+                            <a href="{% url 'delete_review' review.id %}" 
+                               class="btn btn-outline-danger btn-sm"
+                               aria-label="Supprimer la critique associée">
+                                <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
                             </a>
                         </div>
                     {% endif %}
@@ -79,18 +87,13 @@
     {% endif %}
 
     {% if not ticket.review_set.exists %}
-        <div class="text-end">
-            <a href="{% url 'create_review_response' ticket.id %}" class="btn btn-success mt-3">
+        <div class="text-end mb-5">
+            <a href="{% url 'create_review_response' ticket.id %}" 
+               class="btn btn-success mt-3"
+               aria-label="Ajouter une critique au ticket {{ ticket.title }}">
                 ➕ Ajouter une critique
             </a>
         </div>
     {% endif %}
-
-    <!-- ✅ Bouton retour -->
-    <div class="text-center">
-        <a href="{{ next|default:'/' }}" class="btn btn-secondary btn-lg mt-4 mb-4">
-            <i class="bi bi-x-circle"></i> Retour
-        </a>
-    </div>
 </div>
-{% endblock %}
+{% endblock content %}

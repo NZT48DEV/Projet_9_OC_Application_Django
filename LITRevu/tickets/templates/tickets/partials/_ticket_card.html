@@ -1,6 +1,6 @@
 {% load custom_filters %}
 
-<div class="card p-4 shadow-sm border-0 mb-4">
+<div class="card p-4 shadow-sm border-0 mb-4" aria-labelledby="ticket-title-{{ ticket.id }}">
     <!-- Header -->
     <div class="d-flex justify-content-between mb-3">
         <p class="mb-0 text-muted fst-italic">
@@ -11,41 +11,34 @@
             {% endif %}
         </p>
         <small class="text-muted">
-            <i class="bi bi-clock"></i> {{ ticket.time_created|format_date }}
+            <i class="bi bi-clock" aria-hidden="true"></i> {{ ticket.time_created|format_date }}
         </small>
     </div>
 
-    <!-- Contenu -->
-    <div class="text-center mb-3">
-        <h4 class="fw-bold">{{ ticket.title }}</h4>
-        <p class="text-muted">{{ ticket.description|linebreaksbr }}</p>
-
-        <!-- Image -->
-        {% if ticket.image %}
-            
-                <img src="{{ ticket.image.image.url }}" 
-                    class="img-fluid rounded shadow-sm"
-                    style="max-height: 250px; object-fit: contain;">
-        {% endif %}
-    </div>
+    <!-- Contenu (découpé dans partial) -->
+    {% include "tickets/partials/_ticket_card_body.html" with ticket=ticket %}
 
     <!-- Actions -->
-    <div class="d-flex justify-content-end mt-3 gap-2">
-        <!-- Bouton Voir -->
-        <a href="{% url 'view_ticket' ticket.id %}" 
-           class="btn btn-outline-primary btn-sm">
-           <i class="bi bi-eye"></i> Voir le ticket
-        </a>
+    {% if not read_only %}
+        <div class="d-flex justify-content-end mt-3 gap-2">
+            <a href="{% url 'view_ticket' ticket.id %}" 
+               class="btn btn-outline-primary btn-sm"
+               aria-label="Voir le ticket {{ ticket.title }}">
+               <i class="bi bi-eye" aria-hidden="true"></i> Voir le ticket
+            </a>
 
-        {% if ticket.user == request.user and not review and not read_only %}
-            <a href="{% url 'update_ticket' ticket.id %}?next={{ request.path }}" 
-               class="btn btn-outline-warning btn-sm">
-               <i class="bi bi-pencil-square"></i> Modifier
-            </a>
-            <a href="{% url 'delete_ticket' ticket.id %}?next={{ request.path }}" 
-               class="btn btn-outline-danger btn-sm">
-               <i class="bi bi-trash"></i> Supprimer
-            </a>
-        {% endif %}
-    </div>
+            {% if ticket.user == request.user and not review %}
+                <a href="{% url 'update_ticket' ticket.id %}" 
+                   class="btn btn-outline-warning btn-sm"
+                   aria-label="Modifier le ticket {{ ticket.title }}">
+                   <i class="bi bi-pencil-square" aria-hidden="true"></i> Modifier
+                </a>
+                <a href="{% url 'delete_ticket' ticket.id %}" 
+                   class="btn btn-outline-danger btn-sm"
+                   aria-label="Supprimer le ticket {{ ticket.title }}">
+                   <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>

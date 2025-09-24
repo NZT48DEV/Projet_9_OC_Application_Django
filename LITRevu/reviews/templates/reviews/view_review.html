@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
-{% block content %}
-<div class="container mt-4">
 
-    <!-- ✅ Carte détaillée de la critique -->
+{% block content %}
+<div class="container mb-5" role="main">
+
+    <!-- ✅ Bloc principal de la critique -->
     <div class="card card-elevated p-4 mb-5">
-        <!-- Header -->
+        
+        <!-- En-tête : auteur + date -->
         <div class="d-flex justify-content-between mb-3">
             <p class="mb-0 text-muted fst-italic">
                 {% if request.user == review.user %}
@@ -15,78 +17,71 @@
                 {% endif %}
             </p>
             <small class="text-muted">
-                <i class="bi bi-clock"></i> {{ review.time_created|date:"d/m/Y H:i" }}
+                <i class="bi bi-clock" aria-hidden="true"></i> {{ review.time_created|date:"d/m/Y H:i" }}
             </small>
         </div>
 
-        <!-- Contenu critique -->
+        <!-- Contenu de la critique -->
         <div class="text-center mb-3">
-            <h3 class="fw-bold mb-3">{{ review.headline }}</h3>
+            <h2 class="fw-bold mb-3">{{ review.headline }}</h2>
 
-            <!-- Note -->
-            <p class="fs-5 text-warning">
+            <!-- Note (étoiles) -->
+            <p class="fs-5 text-warning" aria-label="Note attribuée : {{ review.rating }} sur 5">
                 {% for i in "12345" %}
-                    {% if forloop.counter <= review.rating %}
-                        <span style="color: gold;">★</span>
-                    {% else %}
-                        <span style="color: lightgray;">☆</span>
-                    {% endif %}
+                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
                 {% endfor %}
             </p>
 
-            <!-- Corps -->
+            <!-- Corps du texte -->
             <p class="lead text-muted">{{ review.body|linebreaksbr }}</p>
         </div>
 
-        <!-- Boutons si c'est l'utilisateur -->
-        {% if request.user == review.user %}
-            <div class="d-flex justify-content-end mt-3 gap-2">
-                <a href="{% url 'update_review' review.id %}?next={{ request.path }}" 
-                   class="btn btn-outline-warning btn-sm">
-                   <i class="bi bi-pencil-square"></i> Modifier
+        <!-- Actions si c'est l'auteur -->
+        {% if review.user == request.user %}
+            <div class="text-end mt-2">
+                <a href="{% url 'update_review' review.id %}" 
+                   class="btn btn-outline-warning btn-sm me-2"
+                   aria-label="Modifier la critique {{ review.headline }}">
+                    <i class="bi bi-pencil-square" aria-hidden="true"></i> Modifier
                 </a>
-                <a href="{% url 'delete_review' review.id %}?next={{ request.path }}" 
-                   class="btn btn-outline-danger btn-sm">
-                   <i class="bi bi-trash"></i> Supprimer
+                <a href="{% url 'delete_review' review.id %}" 
+                   class="btn btn-outline-danger btn-sm"
+                   aria-label="Supprimer la critique {{ review.headline }}">
+                    <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
                 </a>
             </div>
         {% endif %}
     </div>
 
-    <!-- ✅ Ticket associé -->
+    <!-- ✅ Bloc ticket associé -->
     {% if review.ticket %}
         <div class="card card-elevated border-0 shadow-sm p-4">
-            <h5 class="fw-bold mb-3">Ticket associé</h5>
-            <div class="card bg-light border p-3">
-                <div class="text-center mb-3">
-                    <h4 class="fw-bold">{{ review.ticket.title }}</h4>
-                    <p class="text-muted">{{ review.ticket.description|linebreaksbr }}</p>
-                    {% if review.ticket.image %}
-                        <div class="my-3">
-                            <img src="{{ review.ticket.image.image.url }}" 
-                                 alt="image du ticket" 
-                                 class="img-fluid rounded shadow-sm"
-                                 style="max-height: 300px; object-fit: contain;">
-                        </div>
-                    {% endif %}
-                </div>
+            <h3 class="fw-bold mb-3">Ticket associé</h3>
 
-                <!-- Bouton voir ticket -->
-                <div class="text-end">
+            <div class="card bg-light border p-3">
+                <h4 class="fw-bold">{{ review.ticket.title }}</h4>
+                <p class="text-muted">{{ review.ticket.description|linebreaksbr }}</p>
+
+                <!-- Image du ticket (avec taille limitée) -->
+                {% if review.ticket.image %}
+                    <div class="text-center my-3">
+                        <img src="{{ review.ticket.image.image.url }}" 
+                             alt="Image associée au ticket {{ review.ticket.title }}" 
+                             class="img-fluid rounded shadow-sm"
+                             style="max-height: 400px; object-fit: contain;">
+                    </div>
+                {% endif %}
+
+                <!-- Bouton voir le ticket -->
+                <div class="text-end mt-2">
                     <a href="{% url 'view_ticket' review.ticket.id %}" 
-                       class="btn btn-outline-primary btn-sm">
-                       <i class="bi bi-eye"></i> Voir le ticket
+                       class="btn btn-outline-primary btn-sm"
+                       aria-label="Voir le ticket associé {{ review.ticket.title }}">
+                        <i class="bi bi-eye" aria-hidden="true"></i> Voir le ticket
                     </a>
                 </div>
             </div>
         </div>
     {% endif %}
-
-    <!-- ✅ Bouton retour -->
-    <div class="text-center">
-        <a href="{{ next|default:'/' }}" class="btn btn-secondary btn-lg mt-4 mb-4">
-            <i class="bi bi-x-circle"></i> Retour
-        </a>
-    </div>
 </div>
-{% endblock content %}
+{% endblock %}

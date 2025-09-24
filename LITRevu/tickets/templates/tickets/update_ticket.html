@@ -1,28 +1,27 @@
 {% extends 'base.html' %}
+{% block title %}Modifier un ticket - LITRevu{% endblock title %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mb-5" role="main">
     <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 700px;">
         <div class="card-body p-4">
-            <h2 class="text-center mb-4">✏️ Modifier le ticket</h2>
+            <h1 class="text-center mb-4 fs-3">✏️ Modifier le ticket</h1>
 
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" role="form" aria-label="Formulaire de modification de ticket">
                 {% csrf_token %}
-                <input type="hidden" name="next" value="{{ next }}">
-
-                <!-- Formulaire du ticket -->
                 {% include "tickets/partials/_ticket_form.html" with ticket_form=ticket_form image_form=image_form ticket=ticket %}
 
                 <!-- Zone boutons -->
                 <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-success btn-lg">
-                        <i class="bi bi-check-circle-fill"></i> Enregistrer
-                    </button>
-                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary btn-lg">
-                        <i class="bi bi-x-circle"></i> Annuler
+                    <a href="{% url 'view_ticket' ticket.id %}" class="btn btn-outline-secondary btn-lg" aria-label="Annuler la modification et revenir au ticket">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i> Annuler
                     </a>
+                    <button type="submit" class="btn btn-success btn-lg" aria-label="Enregistrer les modifications du ticket">
+                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i> Enregistrer
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

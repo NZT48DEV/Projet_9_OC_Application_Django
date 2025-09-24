@@ -1,0 +1,30 @@
+<div class="text-center mb-3">
+    <h3 id="review-title-{{ review.id }}" class="fw-bold mb-3">{{ review.headline }}</h3>
+
+    <!-- Note (étoiles) -->
+    <p class="fs-5 text-warning" aria-label="Note attribuée : {{ review.rating }} sur 5">
+        {% for i in "12345" %}
+            {% if forloop.counter <= review.rating %}
+                ★
+            {% else %}
+                ☆
+            {% endif %}
+        {% endfor %}
+    </p>
+
+    <!-- Corps du texte avec limite -->
+    <div id="review-body-{{ review.id }}" class="review-body clamp text-muted">
+        {{ review.body|linebreaksbr }}
+    </div>
+
+    <!-- Bouton voir plus / moins -->
+    <div class="text-center">
+        <button class="btn btn-sm btn-primary toggle-btn mt-2"
+                type="button"
+                data-target="#review-body-{{ review.id }}">
+            Voir plus
+        </button>
+    </div>
+
+
+</div>

@@ -1,9 +1,36 @@
 {% extends 'base.html' %}
+{% block title %}Télécharger une image - LITRevu{% endblock title %}
+
 {% block content %}
-    <h2>Télécharger une image</h2>
-    <form action="" method="post" enctype="multipart/form-data">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit">Publier</button>
-    </form>
+<div class="container mt-5" role="main">
+    <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 600px;">
+        <div class="card-body p-4">
+            <h1 class="mb-4 text-center fs-3">🖼️ Télécharger une image</h1>
+
+            <form action="" method="post" enctype="multipart/form-data" role="form" aria-label="Formulaire de téléchargement d’image">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <div class="mb-3">
+                    <label for="{{ form.image.id_for_label }}" class="form-label">Choisir une image</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <div class="text-danger small" id="error-image">
+                            {{ form.image.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary" aria-label="Publier l’image">
+                        <i class="bi bi-upload" aria-hidden="true"></i> Publier
+                    </button>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary" aria-label="Annuler le téléchargement et revenir au flux">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

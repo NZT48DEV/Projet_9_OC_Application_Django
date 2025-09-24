@@ -40,21 +40,23 @@
 - [x] Améliorer le design des cartes (`review` / `ticket`) pour plus de cohérence
 - [x] Améliorer, harmoniser le visuel du site
 - [x] Correction FK Image/Ticket -> lier les images aux tickets
+- [x] Refactoring sur les templates (éviter la répétition de code)
+- [x] Gestion des textes trop long (avec les boutons voir plus/voir moins)
 
 ## 🚧 En cours
-- [ ] Refactoring sur les templates (éviter la répétition de code)
 
 ## 🎯 Pour demain
 - [ ] Ajouter la pagination des posts
 - [ ] Enlever le lien Admin
-
-
-## 🚀 Pour plus tard
 - [ ] Adapter le site pour respecter les WCAG
 - [ ] Embellir le code avec `Flake8` ou `Black`
 - [ ] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
 - [ ] Vérifier que le code est bien documenté et qu'il respecte la PEP8 (commentaires, docstrings, etc.)
 - [ ] Vérifier `requirements.txt`, `README.md`, etc.
+
+
+## 🚀 Pour plus tard
+
 - [ ] Rédiger un petit plan de soutenance (15 min présentation + 10 min questions)
 
 

@@ -8,5 +8,7 @@
             {% endif %}
         </em>
     </p>
-    <small class="text-muted">{{ ticket.time_created|date:"d M Y H:i" }}</small>
+    <small class="text-muted">
+        <i class="bi bi-clock" aria-hidden="true"></i> {{ ticket.time_created|date:"d M Y H:i" }}
+    </small>
 </div>

@@ -1,0 +1,25 @@
+<div class="text-center mb-3">
+    <h3 id="ticket-title-{{ ticket.id }}" class="fw-bold">{{ ticket.title }}</h3>
+
+    <!-- Image -->
+    {% if ticket.image %}
+        <img src="{{ ticket.image.image.url }}" 
+             alt="Image associée au ticket {{ ticket.title }}" 
+             class="img-fluid rounded shadow-sm mt-3"
+             style="max-height: 250px; object-fit: contain;">
+    {% endif %}
+
+    <!-- Description avec limite de lignes -->
+    <div id="ticket-body-{{ ticket.id }}" class="ticket-body clamp text-muted text-center mt-3">
+        {{ ticket.description|linebreaksbr }}
+    </div>
+
+    <!-- Bouton Voir plus / Voir moins -->
+    <div class="text-center">
+        <button class="btn btn-sm btn-primary toggle-btn mt-2"
+                type="button"
+                data-target="#ticket-body-{{ ticket.id }}">
+            Voir plus
+        </button>
+    </div>
+</div>

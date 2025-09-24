@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
+{% block title %}Créer un ticket - LITRevu{% endblock title %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mb-5" role="main">
     <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 700px;">
         <div class="card-body p-4">
-            <h2 class="text-center mb-4">📚 Demander une critique</h2>
+            <h1 class="text-center mb-4 fs-3">📚 Demander une critique</h1>
 
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" role="form" aria-label="Formulaire de création de ticket">
                 {% csrf_token %}
                 {% include "tickets/partials/_ticket_form.html" %}
 
                 <!-- Zone boutons -->
                 <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-send-fill"></i> Envoyer
-                    </button>
-                    <a href="{{ next|default:'/' }}" class="btn btn-outline-secondary btn-lg">
-                        <i class="bi bi-x-circle"></i> Annuler
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg" aria-label="Annuler la création du ticket">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i> Annuler
                     </a>
+                    <button type="submit" class="btn btn-primary btn-lg" aria-label="Envoyer le ticket">
+                        <i class="bi bi-send-fill" aria-hidden="true"></i> Envoyer
+                    </button>
                 </div>
             </form>
         </div>

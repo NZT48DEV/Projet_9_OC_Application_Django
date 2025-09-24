@@ -1,25 +1,50 @@
 {% load static %}
 
+<!-- Champ titre -->
 <div class="mb-3">
-    <label class="form-label">{{ ticket_form.title.label }}</label>
+    <label for="{{ ticket_form.title.id_for_label }}" class="form-label">
+        {{ ticket_form.title.label }}
+    </label>
     {{ ticket_form.title }}
+    {% if ticket_form.title.errors %}
+        <div class="text-danger small" id="error-title">
+            {{ ticket_form.title.errors }}
+        </div>
+    {% endif %}
 </div>
 
+<!-- Champ description -->
 <div class="mb-3">
-    <label class="form-label">{{ ticket_form.description.label }}</label>
+    <label for="{{ ticket_form.description.id_for_label }}" class="form-label">
+        {{ ticket_form.description.label }}
+    </label>
     {{ ticket_form.description }}
+    {% if ticket_form.description.errors %}
+        <div class="text-danger small" id="error-description">
+            {{ ticket_form.description.errors }}
+        </div>
+    {% endif %}
 </div>
 
+<!-- Champ type -->
 <div class="mb-3 col-6">
-    <label class="form-label">{{ ticket_form.type.label }}</label>
+    <label for="{{ ticket_form.type.id_for_label }}" class="form-label">
+        {{ ticket_form.type.label }}
+    </label>
     {{ ticket_form.type }}
+    {% if ticket_form.type.errors %}
+        <div class="text-danger small" id="error-type">
+            {{ ticket_form.type.errors }}
+        </div>
+    {% endif %}
 </div>
 
+<!-- Image actuelle -->
 <div class="mb-3">
-    <label class="form-label">Image actuelle :</label><br>
+    <label class="form-label">Image actuelle</label><br>
     <img id="preview" 
          src="{% if ticket.image %}{{ ticket.image.image.url }}{% endif %}" 
-         alt="aperçu image" 
+         alt="{% if ticket.image %}Image associée au ticket{% else %}Pas d’image associée{% endif %}" 
          class="img-thumbnail mb-2"
          {% if ticket.image %}
              style="max-width: 200px; height: auto;"
@@ -31,7 +56,15 @@
     {% endif %}
 </div>
 
+<!-- Champ upload image -->
 <div class="mb-3">
-    <label class="form-label">{{ image_form.image.label }}</label>
+    <label for="{{ image_form.image.id_for_label }}" class="form-label">
+        {{ image_form.image.label }}
+    </label>
     {{ image_form.image }}
+    {% if image_form.image.errors %}
+        <div class="text-danger small" id="error-image">
+            {{ image_form.image.errors }}
+        </div>
+    {% endif %}
 </div>
