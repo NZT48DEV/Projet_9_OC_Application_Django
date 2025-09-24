@@ -4,33 +4,43 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LITRevu</title>
+
+    <title>{% block title %}LITRevu{% endblock title %}</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS global -->
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
+    <!-- CSS spécifique -->
+    {% block extra_css %}{% endblock extra_css %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- Navbar Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <!-- Lien d’évitement -->
+    <a href="#main-content" class="visually-hidden-focusable bg-dark text-white p-2">
+        Aller au contenu principal
+    </a>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Navigation principale">
         <div class="container-fluid">
             <div class="row w-100 align-items-center">
                 <div class="col-4 d-flex">
-                    <a class="nav-link text-danger" href="{% url 'admin:index' %}">Admin</a>
+                    <a class="nav-link text-warning fw-bold" href="{% url 'admin:index' %}">Admin</a>
                 </div>
                 <div class="col-4 text-center">
-                    <a class="navbar-brand" href="#">LITRevu</a>
+                    <a class="navbar-brand" href="{% url 'home' %}" aria-label="Accueil LITRevu">LITRevu</a>
                 </div>
                 <div class="col-4">
                     {% if user.is_authenticated %}
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Flux</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'user_posts' %}">Posts</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'subscriptions' %}">Abonnements</a></li>
-                            <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}">Se déconnecter</a></li>
+                        <ul class="navbar-nav" role="menubar">
+                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'home' %}">Flux</a></li>
+                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'user_posts' %}">Posts</a></li>
+                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'subscriptions' %}">Abonnements</a></li>
+                            <li class="nav-item" role="none"><a class="nav-link text-warning fw-bold" role="menuitem" href="{% url 'logout' %}">Se déconnecter</a></li>
                         </ul>
                     </div>
                     {% endif %}
@@ -39,9 +49,9 @@
         </div>
     </nav>
 
-    <!-- Zone des toasts -->
+    <!-- Zone des messages -->
     <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed top-10 end-0 p-3" style="z-index: 1100">
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
             {% if messages %}
                 {% for message in messages %}
                     <div class="toast align-items-center text-white
@@ -51,15 +61,15 @@
                         {% elif message.tags == 'info' %} bg-info text-dark
                         {% endif %}
                         border-0 mb-2"
-                        role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+                        role="status" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
                         <div class="d-flex">
                             <div class="toast-body">
                                 {{ message|safe }}
                             </div>
                             <button type="button"
-                                    class="btn-close btn-close-white me-2 m-auto"
+                                    class="btn-close me-2 m-auto"
                                     data-bs-dismiss="toast"
-                                    aria-label="Close"></button>
+                                    aria-label="Fermer la notification"></button>
                         </div>
                     </div>
                 {% endfor %}
@@ -68,7 +78,7 @@
     </div>
 
     <!-- Contenu principal -->
-    <main class="container mt-5">
+    <main id="main-content" class="container mt-5 flex-grow-1" role="main">
         {% block content %}
         <div class="row">
             <div class="col-md-6">
@@ -81,13 +91,21 @@
         {% endblock content %}
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto" role="contentinfo">
+        <p class="mb-0">&copy; 2025 LITRevu – Tous droits réservés.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- Scripts globaux -->
+    <script src="{% static 'core/js/toasts.js' %}" defer></script>
+    <script src="{% static 'core/js/image_preview.js' %}" defer></script>
+    <script src="{% static 'core/js/autocomplete.js' %}" defer></script>
+
+    <!-- Scripts spécifiques -->
+    {% block extra_js %}{% endblock extra_js %}
+
 </body>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-
-<script src="{% static 'core/js/toasts.js' %}" defer></script>
-<script src="{% static 'core/js/image_preview.js' %}" defer></script>
-<script src="{% static 'core/js/autocomplete.js' %}" defer></script>
-
 </html>

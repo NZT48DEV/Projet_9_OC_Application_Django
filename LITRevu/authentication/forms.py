@@ -38,9 +38,9 @@ class CustomeAuthenticationForm(AuthenticationForm):
         # Ajouter des placeholders
         self.fields['username'].widget.attrs.update({
             'placeholder': 'Nom d’utilisateur',
-            'class': 'form-control w-50'
+            'class': 'form-control w-100'
         })
         self.fields['password'].widget.attrs.update({
             'placeholder': 'Mot de passe',
-            'class': 'form-control w-50'
+            'class': 'form-control w-100'
         })

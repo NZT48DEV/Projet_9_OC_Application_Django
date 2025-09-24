@@ -1,40 +1,46 @@
 {% extends "base.html" %}
+{% block title %}Gérer vos abonnements - LITRevu{% endblock title %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5" role="main">
 
     <!-- Titre principal -->
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">👥 Gérer vos abonnements</h2>
+    <header class="text-center mb-5">
+        <h1 class="fw-bold">👥 Gérer vos abonnements</h1>
         <p class="text-muted">Suivez de nouveaux utilisateurs ou gérez vos abonnements et blocages.</p>
-    </div>
+    </header>
 
     <!-- 🔹 Barre de recherche pour s'abonner -->
-    <div class="card shadow-sm mb-5">
+    <section class="card shadow-sm mb-5" aria-labelledby="subscribe-title">
         <div class="card-body">
-            <h4 class="card-title mb-3">S'abonner à un utilisateur</h4>
-            <form method="post" class="d-flex position-relative">
+            <h2 id="subscribe-title" class="card-title mb-3 fs-4">S’abonner à un utilisateur</h2>
+            <form method="post" class="d-flex position-relative" role="search" aria-label="Formulaire d’abonnement">
                 {% csrf_token %}
-                <input type="text" id="search-user-follow" name="username" 
-                       class="form-control" placeholder="Nom d'utilisateur à suivre" autocomplete="off">
+                <label for="search-user-follow" class="visually-hidden">Nom d’utilisateur à suivre</label>
+                <input type="text" id="search-user-follow" name="username"
+                       class="form-control" placeholder="Nom d’utilisateur à suivre" autocomplete="off">
                 <button type="submit" class="btn btn-primary ms-2">
-                    <i class="bi bi-person-plus"></i> S'abonner
+                    <i class="bi bi-person-plus" aria-hidden="true"></i> 
+                    <span class="visually-hidden">S’abonner</span>
+                    <span aria-hidden="true">S’abonner</span>
                 </button>
-                <ul id="suggestions-follow" class="list-group position-absolute w-100" 
-                    style="top: 100%; z-index: 1000;"></ul>
+                <ul id="suggestions-follow" class="list-group position-absolute w-100"
+                    style="top: 100%; z-index: 1000;" role="listbox" aria-label="Suggestions d’utilisateurs"></ul>
             </form>
         </div>
-    </div>
+    </section>
 
     <!-- 🔹 Liste des abonnements -->
-    <div class="card shadow-sm mb-5">
+    <section class="card shadow-sm mb-5" aria-labelledby="following-title">
         <div class="card-body">
-            <h4 class="card-title mb-3">📌 Abonnements</h4>
-            <ul class="list-group">
+            <h2 id="following-title" class="card-title mb-3 fs-4">📌 Abonnements</h2>
+            <ul class="list-group" role="list" aria-label="Liste des abonnements">
                 {% for follow in following %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ follow.followed_user.username }}
-                        <a href="{% url 'unfollow' follow.followed_user.id %}" class="btn btn-danger btn-sm">
-                            <i class="bi bi-person-dash"></i> Désabonner
+                    <li class="list-group-item d-flex justify-content-between align-items-center" role="listitem">
+                        <span>{{ follow.followed_user.username }}</span>
+                        <a href="{% url 'unfollow' follow.followed_user.id %}" 
+                           class="btn btn-danger btn-sm" aria-label="Se désabonner de {{ follow.followed_user.username }}">
+                            <i class="bi bi-person-dash" aria-hidden="true"></i> Désabonner
                         </a>
                     </li>
                 {% empty %}
@@ -42,18 +48,19 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
+    </section>
 
     <!-- 🔹 Liste des abonnés -->
-    <div class="card shadow-sm mb-5">
+    <section class="card shadow-sm mb-5" aria-labelledby="followers-title">
         <div class="card-body">
-            <h4 class="card-title mb-3">👀 Abonnés</h4>
-            <ul class="list-group">
+            <h2 id="followers-title" class="card-title mb-3 fs-4">👀 Abonnés</h2>
+            <ul class="list-group" role="list" aria-label="Liste de vos abonnés">
                 {% for follower in followers %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ follower.user.username }}
-                        <a href="{% url 'block_user' follower.user.id %}" class="btn btn-warning btn-sm">
-                            <i class="bi bi-person-x"></i> Bloquer
+                    <li class="list-group-item d-flex justify-content-between align-items-center" role="listitem">
+                        <span>{{ follower.user.username }}</span>
+                        <a href="{% url 'block_user' follower.user.id %}" 
+                           class="btn btn-warning btn-sm" aria-label="Bloquer {{ follower.user.username }}">
+                            <i class="bi bi-person-x" aria-hidden="true"></i> Bloquer
                         </a>
                     </li>
                 {% empty %}
@@ -61,35 +68,40 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
+    </section>
 
     <!-- 🔹 Bloquer un utilisateur -->
-    <div class="card shadow-sm mb-5">
+    <section class="card shadow-sm mb-5" aria-labelledby="block-title">
         <div class="card-body">
-            <h4 class="card-title mb-3">🚫 Bloquer un utilisateur</h4>
-            <form method="post" action="{% url 'block_user_search' %}" class="d-flex position-relative">
+            <h2 id="block-title" class="card-title mb-3 fs-4">🚫 Bloquer un utilisateur</h2>
+            <form method="post" action="{% url 'block_user_search' %}" class="d-flex position-relative" 
+                  aria-label="Formulaire de blocage d’utilisateur">
                 {% csrf_token %}
-                <input type="text" id="search-user-block" name="username" 
-                       class="form-control" placeholder="Nom d'utilisateur à bloquer" autocomplete="off">
+                <label for="search-user-block" class="visually-hidden">Nom d’utilisateur à bloquer</label>
+                <input type="text" id="search-user-block" name="username"
+                       class="form-control" placeholder="Nom d’utilisateur à bloquer" autocomplete="off">
                 <button type="submit" class="btn btn-warning ms-2">
-                    <i class="bi bi-shield-exclamation"></i> Bloquer
+                    <i class="bi bi-shield-exclamation" aria-hidden="true"></i> 
+                    <span class="visually-hidden">Bloquer</span>
+                    <span aria-hidden="true">Bloquer</span>
                 </button>
-                <ul id="suggestions-block" class="list-group position-absolute w-100" 
-                    style="top: 100%; z-index: 1000;"></ul>
+                <ul id="suggestions-block" class="list-group position-absolute w-100"
+                    style="top: 100%; z-index: 1000;" role="listbox" aria-label="Suggestions d’utilisateurs à bloquer"></ul>
             </form>
         </div>
-    </div>
+    </section>
 
     <!-- 🔹 Liste des utilisateurs bloqués -->
-    <div class="card shadow-sm">
+    <section class="card shadow-sm mb-5" aria-labelledby="blocked-title">
         <div class="card-body">
-            <h4 class="card-title mb-3">⛔ Utilisateurs bloqués</h4>
-            <ul class="list-group">
+            <h2 id="blocked-title" class="card-title mb-3 fs-4">⛔ Utilisateurs bloqués</h2>
+            <ul class="list-group" role="list" aria-label="Liste des utilisateurs bloqués">
                 {% for blocked in blocked_list %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ blocked.blocked_user.username }}
-                        <a href="{% url 'unblock_user' blocked.blocked_user.id %}" class="btn btn-success btn-sm">
-                            <i class="bi bi-unlock"></i> Débloquer
+                    <li class="list-group-item d-flex justify-content-between align-items-center" role="listitem">
+                        <span>{{ blocked.blocked_user.username }}</span>
+                        <a href="{% url 'unblock_user' blocked.blocked_user.id %}" 
+                           class="btn btn-success btn-sm" aria-label="Débloquer {{ blocked.blocked_user.username }}">
+                            <i class="bi bi-unlock" aria-hidden="true"></i> Débloquer
                         </a>
                     </li>
                 {% empty %}
@@ -97,7 +109,7 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
+    </section>
 
 </div>
 {% endblock %}

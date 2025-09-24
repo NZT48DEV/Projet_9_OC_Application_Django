@@ -1,38 +1,62 @@
 {% extends 'base.html' %}
+{% block title %}Inscription - LITRevu{% endblock title %}
 
 {% block content %}
-<div class="d-flex justify-content-center mt-5">
-    <div class="card p-4 shadow-lg rounded-3 border-0" style="min-width: 320px; max-width: 420px; width: 100%;">
-        <h2 class="mb-4 text-center">📝 Inscription</h2>
+<div class="d-flex justify-content-center mt-5" role="main">
+    <div class="card p-4 shadow-lg rounded-3 border-0" style="min-width: 320px; max-width: 420px; width: 100%;" aria-labelledby="signup-title">
+        <h1 id="signup-title" class="mb-4 text-center fs-3">📝 Inscription</h1>
 
-        <form method="post">
+        <form method="post" role="form" aria-describedby="signup-help">
             {% csrf_token %}
             {{ form.non_field_errors }}
 
+            <!-- Nom d’utilisateur -->
             <div class="mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label visually-hidden">Nom d’utilisateur</label>
                 {{ form.username }}
-                {{ form.username.errors }}
+                {% if form.username.errors %}
+                    <div class="text-danger small" id="error-username">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
             </div>
-            
+
+            <!-- Mot de passe -->
             <div class="mb-3">
+                <label for="{{ form.password1.id_for_label }}" class="form-label visually-hidden">Mot de passe</label>
                 {{ form.password1 }}
-                {{ form.password1.errors }}
+                {% if form.password1.errors %}
+                    <div class="text-danger small" id="error-password1">
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
             </div>
 
+            <!-- Confirmation mot de passe -->
             <div class="mb-3">
+                <label for="{{ form.password2.id_for_label }}" class="form-label visually-hidden">Confirmer le mot de passe</label>
                 {{ form.password2 }}
-                {{ form.password2.errors }}
+                {% if form.password2.errors %}
+                    <div class="text-danger small" id="error-password2">
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
             </div>
 
+            <!-- Actions -->
             <div class="d-flex justify-content-between mt-4">
-                <a href="{% url 'welcome' %}" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Retour
+                <a href="{% url 'welcome' %}" class="btn btn-outline-secondary" aria-label="Retour à la page d’accueil">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour
                 </a>
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-check-circle"></i> S’inscrire
+                <button type="submit" class="btn btn-success" aria-label="Valider l’inscription">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i> S’inscrire
                 </button>
             </div>
         </form>
+
+        <p id="signup-help" class="visually-hidden">
+            Remplissez ce formulaire pour créer un compte LITRevu. Tous les champs sont obligatoires.
+        </p>
     </div>
 </div>
 {% endblock content %}

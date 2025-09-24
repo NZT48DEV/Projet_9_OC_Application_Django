@@ -37,12 +37,11 @@
 - [x] Enregistrer le choix du filtre pour la session.
 - [x] Voir les critiques associés aux personnes des tickets qu'on suit, même si la critique est posté par un autre utilisateur.
 - [x] Ne pas pouvoir accéder a un ticket ou une review d'une personne qui ma bloqué.
+- [x] Améliorer le design des cartes (`review` / `ticket`) pour plus de cohérence
 - [x] Améliorer, harmoniser le visuel du site
 - [x] Correction FK Image/Ticket -> lier les images aux tickets
 
 ## 🚧 En cours
-
-- [ ] Améliorer le design des cartes (`review` / `ticket`) pour plus de cohérence
 - [ ] Refactoring sur les templates (éviter la répétition de code)
 
 ## 🎯 Pour demain
