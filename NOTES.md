@@ -47,14 +47,14 @@
 - [x] Enlever le lien Admin (mis en commentaire)
 - [x] Uniformiser les partials reviews / ticket
 - [x] Vérifier que le code est bien documenté et qu'il respecte la PEP8 (commentaires, docstrings, etc.)
+- [x] Vérifier `requirements.txt`, `README.md`, etc.
 
 ## 🚧 En cours
-
-- [ ] Vérifier `requirements.txt`, `README.md`, etc.
-
-## 🎯 Pour demain
 - [ ] Embellir le code avec `Flake8` ou `Black`
 - [ ] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
+
+## 🎯 Pour demain
+
 
 ## 🚀 Pour plus tard
 
