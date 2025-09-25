@@ -1,3 +1,9 @@
+"""
+Vues pour la gestion des critiques (reviews).
+Inclut la création, la mise à jour, la suppression, ainsi que la gestion conjointe
+ticket + critique.
+"""
+
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -11,18 +17,30 @@ from userfollows.models import UserBlock
 
 @login_required
 def view_review(request, review_id):
+    """
+    Affiche une critique spécifique.
+    - Vérifie si l’auteur du ticket lié a bloqué l’utilisateur courant.
+    - Si bloqué → redirige avec message d’erreur.
+    """
     review = get_object_or_404(Review, id=review_id)
 
-    # Vérifie si l’auteur du ticket lié a bloqué l’utilisateur courant
     if UserBlock.objects.filter(user=review.ticket.user, blocked_user=request.user).exists():
         messages.error(request, "❌ Cette critique n'est pas disponible.")
         return redirect("home")
 
-    return render(request, "reviews/view_review.html", {"review": review})
+    return render(request, "reviews/view_review.html", {
+        "review": review,
+        "read_only": True,
+    })
 
 
 @login_required
 def create_review_with_ticket(request):
+    """
+    Crée une critique en même temps qu’un ticket.
+    - Valide et sauvegarde TicketForm, ImageForm et ReviewForm.
+    - Associe le ticket et la critique à l’utilisateur courant.
+    """
     if request.method == "POST":
         ticket_form = TicketForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
@@ -60,6 +78,11 @@ def create_review_with_ticket(request):
 
 @login_required
 def create_review_response(request, ticket_id):
+    """
+    Crée une critique en réponse à un ticket existant.
+    - Vérifie si l’auteur du ticket a bloqué l’utilisateur courant.
+    - Empêche la création si une critique existe déjà pour ce ticket.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
     if UserBlock.objects.filter(user=ticket.user, blocked_user=request.user).exists():
@@ -90,6 +113,11 @@ def create_review_response(request, ticket_id):
 
 @login_required
 def delete_review(request, review_id):
+    """
+    Supprime une critique (si l’utilisateur en est l’auteur).
+    - Si méthode POST → suppression directe et redirection vers user_posts.
+    - Sinon → affiche confirmation.
+    """
     review = get_object_or_404(Review, id=review_id, user=request.user)
 
     if request.method == "POST":
@@ -102,6 +130,11 @@ def delete_review(request, review_id):
 
 @login_required
 def update_review(request, review_id):
+    """
+    Met à jour une critique existante (si l’utilisateur en est l’auteur).
+    - Préremplit le formulaire avec les données de la critique.
+    - Sauvegarde les modifications si formulaire valide.
+    """
     review = get_object_or_404(Review, id=review_id, user=request.user)
 
     if request.method == "POST":
@@ -121,6 +154,11 @@ def update_review(request, review_id):
 
 @login_required
 def update_review_with_ticket(request, review_id):
+    """
+    Met à jour une critique et son ticket associé.
+    - Permet aussi de supprimer soit la critique, soit le ticket via POST.
+    - Met à jour TicketForm, ImageForm et ReviewForm ensemble.
+    """
     review = get_object_or_404(Review, id=review_id, user=request.user)
     ticket = review.ticket
 
@@ -178,6 +216,11 @@ def update_review_with_ticket(request, review_id):
 
 @login_required
 def delete_review_with_ticket(request, review_id):
+    """
+    Supprime une critique et son ticket associé (si l’utilisateur en est l’auteur).
+    - Si méthode POST → suppression des deux objets, puis redirection.
+    - Sinon → affiche confirmation.
+    """
     review = get_object_or_404(Review, id=review_id, user=request.user)
     ticket = review.ticket
 

@@ -31,38 +31,16 @@
         </ul>
     </div>
 
-    <!-- Flux -->
+    <!-- Flux avec scroll infini -->
     {% if tickets %}
-        {% for ticket in tickets %}
-            <div class="card mb-4 p-3 shadow-sm">
+        <div id="posts-container">
+            {% include "flux/partials/_tickets_list.html" with tickets=tickets %}
+        </div>
 
-                <!-- ✅ Partial ticket -->
-                {% include "tickets/partials/_ticket_card.html" with ticket=ticket %}
-
-                <!-- Critiques associées -->
-                {% if ticket.review_set.all %}
-                    {% for review in ticket.review_set.all %}
-                        <div class="card bg-light p-3 mt-3 border-0 shadow-sm">
-                            {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="card bg-light p-3 mt-3 border-secondary shadow-sm">
-                        <p class="text-muted mb-0">Aucune critique pour le moment.</p>
-                    </div>
-                {% endif %}
-
-                <!-- Bouton créer une critique si aucune critique -->
-                {% if not ticket.review_set.exists %}
-                    <div class="text-end mt-2">
-                        <a href="{% url 'create_review_response' ticket.id %}?next={{ request.path }}" class="btn btn-success">
-                            ➕ Ajouter une critique
-                        </a>
-                    </div>
-                {% endif %}
-
-            </div>
-        {% endfor %}
+        <!-- Loader -->
+        <div id="loading" class="text-center my-3 d-none">
+            <span class="spinner-border"></span> Chargement...
+        </div>
     {% else %}
         <div class="card text-center shadow-sm border-0 bg-light p-5 mt-4">
             <div class="mb-3">

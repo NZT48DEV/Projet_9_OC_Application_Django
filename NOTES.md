@@ -42,18 +42,19 @@
 - [x] Correction FK Image/Ticket -> lier les images aux tickets
 - [x] Refactoring sur les templates (éviter la répétition de code)
 - [x] Gestion des textes trop long (avec les boutons voir plus/voir moins)
+- [x] Adapter le site pour respecter les WCAG
+- [x] Ajouter la pagination des posts
+- [x] Enlever le lien Admin (mis en commentaire)
+- [x] Uniformiser les partials reviews / ticket
+- [x] Vérifier que le code est bien documenté et qu'il respecte la PEP8 (commentaires, docstrings, etc.)
 
 ## 🚧 En cours
 
-## 🎯 Pour demain
-- [ ] Ajouter la pagination des posts
-- [ ] Enlever le lien Admin
-- [ ] Adapter le site pour respecter les WCAG
-- [ ] Embellir le code avec `Flake8` ou `Black`
-- [ ] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
-- [ ] Vérifier que le code est bien documenté et qu'il respecte la PEP8 (commentaires, docstrings, etc.)
 - [ ] Vérifier `requirements.txt`, `README.md`, etc.
 
+## 🎯 Pour demain
+- [ ] Embellir le code avec `Flake8` ou `Black`
+- [ ] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
 
 ## 🚀 Pour plus tard
 

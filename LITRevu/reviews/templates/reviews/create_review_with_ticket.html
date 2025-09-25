@@ -19,12 +19,12 @@
                 {% include "reviews/partials/_review_form.html" with review_form=review_form %}
 
                 <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-send-fill"></i> Envoyer
-                    </button>
                     <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
                         <i class="bi bi-x-circle"></i> Annuler
                     </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-send-fill"></i> Envoyer
+                    </button>
                 </div>
             </form>
         </div>

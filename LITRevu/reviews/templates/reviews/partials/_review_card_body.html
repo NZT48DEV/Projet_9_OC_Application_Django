@@ -13,7 +13,7 @@
     </p>
 
     <!-- Corps du texte avec limite -->
-    <div id="review-body-{{ review.id }}" class="review-body clamp text-muted">
+    <div id="review-body-{{ review.id }}" class="review-body text-muted {% if not read_only %}clamp{% endif %}">
         {{ review.body|linebreaksbr }}
     </div>
 

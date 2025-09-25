@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load custom_tags %}
+{% load custom_filters %}
 {% block content %}
 <div class="container" role="main">
 
@@ -10,52 +10,16 @@
     </header>
 
     {% if posts %}
-        <!-- 🔹 Liste des posts -->
-        <section aria-labelledby="page-title">
-            {% for post in posts %}
-                {% if post|classname == "Review" %}
-                    <!-- 🔸 Bloc Review seule -->
-                    <article class="card mb-4 p-3 shadow-sm" aria-label="Critique publiée">
-                        {% include "reviews/partials/_review_card.html" with review=post %}
-                    </article>
-
-                {% elif post|classname == "Ticket" %}
-                    <!-- 🔸 Bloc Ticket -->
-                    <article class="card mb-4 p-3 shadow-sm" aria-label="Ticket publié">
-                        {% include "tickets/partials/_ticket_card.html" with ticket=post %}
-
-                        <!-- 🔹 Critiques associées -->
-                        {% if post.review_set.all %}
-                            <section class="mt-3" aria-label="Critiques associées à ce ticket">
-                                {% for review in post.review_set.all %}
-                                    <div class="card bg-light p-3 mt-3">
-                                        {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
-                                    </div>
-                                {% endfor %}
-                            </section>
-                        {% else %}
-                            <!-- 🔸 Message si aucune critique -->
-                            <div class="card bg-light p-3 mt-3 border-secondary shadow-sm">
-                                <p class="text-muted mb-0">Aucune critique pour le moment.</p>
-                            </div>
-                        {% endif %}
-
-                        <!-- 🔹 Lien pour ajouter une critique si aucune n’existe -->
-                        {% if not post.review_set.exists %}
-                            <div class="text-end">
-                                <a href="{% url 'create_review_response' post.id %}"
-                                   class="btn btn-success mt-3"
-                                   aria-label="Ajouter une critique au ticket {{ post.title }}">
-                                    ➕ Ajouter une critique
-                                </a>
-                            </div>
-                        {% endif %}
-                    </article>
-                {% endif %}
-            {% endfor %}
+        <!-- 🔹 Liste des posts avec scroll infini -->
+        <section aria-labelledby="page-title" id="posts-container">
+            {% include "posts/partials/_posts_list.html" with posts=posts %}
         </section>
-    {% else %}
 
+        <!-- Loader -->
+        <div id="loading" class="text-center my-3 d-none">
+            <span class="spinner-border"></span> Chargement...
+        </div>
+    {% else %}
         <!-- 🔹 Message si aucun post -->
         <section class="card text-center shadow-sm border-0 bg-light p-5 mt-4" aria-label="Aucun post disponible">
             <div class="mb-3">

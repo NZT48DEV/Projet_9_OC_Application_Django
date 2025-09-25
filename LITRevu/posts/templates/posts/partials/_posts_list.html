@@ -1,0 +1,19 @@
+{% load custom_filters %}
+{% for post in posts %}
+    {% if post|classname == "Review" %}
+        <article class="card mb-4 p-3 shadow-sm" aria-label="Critique publiée">
+            {% include "reviews/partials/_review_card.html" with review=post %}
+        </article>
+    {% elif post|classname == "Ticket" %}
+        <article class="card mb-4 p-3 shadow-sm" aria-label="Ticket publié">
+            {% include "tickets/partials/_ticket_card.html" with ticket=post %}
+            {% if post.review_set.all %}
+                {% for review in post.review_set.all %}
+                    <div class="card bg-light p-3 mt-3">
+                        {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </article>
+    {% endif %}
+{% endfor %}

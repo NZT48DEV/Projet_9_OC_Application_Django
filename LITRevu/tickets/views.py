@@ -1,26 +1,26 @@
+"""
+Vues pour la gestion des tickets et des images associées.
+Inclut la création, la modification, la visualisation et la suppression.
+"""
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 
 from . import forms, models
 from tickets.models import Ticket, Image
 from tickets.forms import TicketForm, ImageForm
 from reviews.models import Review
-from userfollows.models import UserBlock  # ✅ pour vérifier les blocages
-
-
-@login_required
-def home(request):
-    tickets = Ticket.objects.all()
-    return render(request, "tickets/home.html", {
-        "tickets": tickets,
-        "read_only": True,
-    })
+from userfollows.models import UserBlock
 
 
 @login_required
 def image_upload(request):
+    """
+    Permet à l’utilisateur d’uploader une image.
+    - Si méthode POST → sauvegarde l’image avec l’utilisateur courant comme uploader.
+    - Redirige ensuite vers la home avec un message de succès.
+    """
     form = forms.ImageForm()
     if request.method == "POST":
         form = forms.ImageForm(request.POST, request.FILES)
@@ -30,6 +30,7 @@ def image_upload(request):
             image.save()
             messages.success(request, "✅ Image téléchargée avec succès.")
             return redirect("home")
+
     return render(request, "tickets/image_upload.html", {
         "form": form,
         "read_only": False,
@@ -38,18 +39,23 @@ def image_upload(request):
 
 @login_required
 def create_ticket(request):
+    """
+    Création d’un nouveau ticket avec option d’ajout d’une image.
+    - Valide les formulaires TicketForm et ImageForm.
+    - Associe le ticket et l’image à l’utilisateur courant.
+    """
     ticket_form = TicketForm()
     image_form = ImageForm()
+
     if request.method == "POST":
         ticket_form = TicketForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
+
         if ticket_form.is_valid() and image_form.is_valid():
-            # Création du ticket
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
             ticket.save()
 
-            # Création de l’image liée (si uploadée)
             if image_form.cleaned_data.get("image"):
                 image = image_form.save(commit=False)
                 image.uploader = request.user
@@ -58,6 +64,7 @@ def create_ticket(request):
 
             messages.success(request, "✅ Votre ticket a bien été créé.")
             return redirect("home")
+
     return render(request, "tickets/create_ticket.html", {
         "ticket_form": ticket_form,
         "image_form": image_form,
@@ -67,9 +74,14 @@ def create_ticket(request):
 
 @login_required
 def view_ticket(request, ticket_id):
+    """
+    Affiche le détail d’un ticket spécifique.
+    - Vérifie si l’auteur du ticket a bloqué l’utilisateur courant.
+    - Récupère toutes les critiques associées.
+    - Passe la première critique de l’utilisateur courant séparément.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
-    # ✅ Vérifie si l’auteur du ticket a bloqué l’utilisateur courant
     if UserBlock.objects.filter(user=ticket.user, blocked_user=request.user).exists():
         messages.error(request, "❌ Ce ticket n'est pas disponible.")
         return redirect("home")
@@ -88,6 +100,11 @@ def view_ticket(request, ticket_id):
 
 @login_required
 def delete_ticket(request, ticket_id):
+    """
+    Supprime un ticket (uniquement si l’utilisateur courant en est l’auteur).
+    - Si méthode POST → suppression du ticket puis redirection home.
+    - Si méthode GET → affiche une page de confirmation.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == "POST":
@@ -104,9 +121,13 @@ def delete_ticket(request, ticket_id):
 
 @login_required
 def update_ticket(request, ticket_id):
+    """
+    Met à jour un ticket existant (uniquement si l’utilisateur en est l’auteur).
+    - Préremplit les formulaires TicketForm et ImageForm avec les données existantes.
+    - Si méthode POST → enregistre les modifications du ticket et de son image associée.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
-    # ✅ Vérifie si une image existe déjà
     try:
         image_instance = ticket.image
     except Image.DoesNotExist:
@@ -117,12 +138,10 @@ def update_ticket(request, ticket_id):
         image_form = ImageForm(request.POST, request.FILES, instance=image_instance)
 
         if ticket_form.is_valid() and image_form.is_valid():
-            # Mise à jour du ticket
             updated_ticket = ticket_form.save(commit=False)
             updated_ticket.user = request.user
             updated_ticket.save()
 
-            # Mise à jour ou création de l’image
             if image_form.cleaned_data.get("image"):
                 image = image_form.save(commit=False)
                 image.uploader = request.user

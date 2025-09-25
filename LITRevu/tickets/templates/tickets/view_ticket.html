@@ -61,7 +61,7 @@
             <div class="card card-elevated border-0 shadow-sm p-4 mb-3" aria-label="Critique associée">
                 <h3 class="fw-bold mb-3 fs-5">Critique associée</h3>
                 <div class="card bg-light border p-3">
-                    {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True %}
+                    {% include "reviews/partials/_review_card.html" with review=review hide_ticket=True read_only=True %}
                     
                     {% if review.user == request.user %}
                         <div class="text-end mt-2">

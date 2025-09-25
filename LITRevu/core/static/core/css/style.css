@@ -1,33 +1,28 @@
+/**
+ * Styles globaux de l'application
+ * ----------------------------------------
+ * - Couleur de fond douce (#f0f2f5) pour mettre en valeur les cartes.
+ * - Gestion des cartes avec ombre et effet de survol.
+ * - Gestion du "clamp" (limitation du texte à 4 lignes).
+ */
 
 body {
-    padding-top: 40px;
-    background-color: #f0f2f5; /* léger gris clair pour faire ressortir les cartes */
+    padding-top: 40px; /* Décale le contenu sous la navbar fixe */
+    background-color: #f0f2f5; /* Gris clair qui contraste avec les cartes */
 }
 
-/* Style de base : ombre douce */
-.card-elevated {
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: #fff;
-}
-
-/* Variante avec effet au survol */
-.card-elevated-hover {
-    transition: all 0.2s ease-in-out;
-}
-
-.card-elevated-hover:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
+/* ============================= */
+/* ✂️ Clamp pour limiter le texte */
+/* ============================= */
+/* Applique une limite de 4 lignes max,
+   utile dans les aperçus (flux, posts),
+   mais pas dans les pages de détail. */
 .ticket-body.clamp,
 .review-body.clamp {
     display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4; /* Compatibilité Chrome/Safari */
+    line-clamp: 4;         /* Compatibilité standard */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;

@@ -1,0 +1,22 @@
+{% if not read_only %}
+    <div class="d-flex justify-content-end mt-3 gap-2">
+        <a href="{% url 'view_ticket' ticket.id %}" 
+            class="btn btn-outline-primary btn-sm"
+            aria-label="Voir le ticket {{ ticket.title }}">
+            <i class="bi bi-eye" aria-hidden="true"></i> Voir le ticket
+        </a>
+
+        {% if ticket.user == request.user and not review %}
+            <a href="{% url 'update_ticket' ticket.id %}" 
+                class="btn btn-outline-warning btn-sm"
+                aria-label="Modifier le ticket {{ ticket.title }}">
+                <i class="bi bi-pencil-square" aria-hidden="true"></i> Modifier
+            </a>
+            <a href="{% url 'delete_ticket' ticket.id %}" 
+                class="btn btn-outline-danger btn-sm"
+                aria-label="Supprimer le ticket {{ ticket.title }}">
+                <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
+            </a>
+        {% endif %}
+    </div>
+{% endif %}

@@ -28,7 +28,7 @@
         <div class="container-fluid">
             <div class="row w-100 align-items-center">
                 <div class="col-4 d-flex">
-                    <a class="nav-link text-warning fw-bold" href="{% url 'admin:index' %}">Admin</a>
+                    <!-- <a class="nav-link text-warning fw-bold" href="{% url 'admin:index' %}">Admin</a> -->
                 </div>
                 <div class="col-4 text-center">
                     <a class="navbar-brand" href="{% url 'home' %}" aria-label="Accueil LITRevu">LITRevu</a>
@@ -104,6 +104,7 @@
     <script src="{% static 'core/js/image_preview.js' %}" defer></script>
     <script src="{% static 'core/js/autocomplete.js' %}" defer></script>
     <script src="{% static 'core/js/content_toggle.js' %}" defer></script>
+    <script src="{% static 'core/js/infinite_scroll.js' %}" defer></script>
 
     <!-- Scripts spécifiques -->
     {% block extra_js %}{% endblock extra_js %}

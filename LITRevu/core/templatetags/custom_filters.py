@@ -10,7 +10,6 @@ except locale.Error:
     # fallback si la locale n'est pas dispo
     pass
 
-
 @register.filter
 def format_date(value):
     """
@@ -19,3 +18,10 @@ def format_date(value):
     if not value:
         return ""
     return value.strftime("%H:%M, %d %B %Y")  # %B = mois complet
+
+@register.filter
+def classname(obj):
+    """
+    Retourne le nom de la classe d’un objet (ex: Review, Ticket)
+    """
+    return obj.__class__.__name__
