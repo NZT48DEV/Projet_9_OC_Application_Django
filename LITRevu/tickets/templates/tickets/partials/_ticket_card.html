@@ -5,7 +5,11 @@
     <div class="d-flex justify-content-between mb-3">
         <p class="mb-0 text-muted fst-italic">
             {% if ticket.user == request.user %}
-                Vous avez demandé une critique
+                {% if ticket.review_set.all|length > 0 %}
+                    Vous avez créé une critique
+                {% else %}
+                    Vous avez demandé une critique
+                {% endif %}
             {% else %}
                 {{ ticket.user.username }} a demandé une critique
             {% endif %}

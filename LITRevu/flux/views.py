@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 
 from reviews.models import Review
 from tickets.models import Ticket
-from userfollows.models import UserFollows, UserBlock
+from userfollows.models import UserBlock, UserFollows
 
 
 @login_required
@@ -36,17 +36,26 @@ def home(request):
         blocked_user=request.user
     ).values_list("user_id", flat=True)
 
+    # Utilisateurs que j’ai bloqués
+    i_blocked = UserBlock.objects.filter(
+        user=request.user
+    ).values_list("blocked_user_id", flat=True)
+
     # Récupération des tickets en fonction du filtre
     if filter_mode == "all":
-        tickets = Ticket.objects.exclude(user_id__in=blocked_me)
+        tickets = Ticket.objects.exclude(user_id__in=blocked_me).exclude(user_id__in=i_blocked)
     else:
         followed_users = UserFollows.objects.filter(
             user=request.user
         ).values_list("followed_user", flat=True)
 
-        tickets = Ticket.objects.filter(
-            user__in=set(list(followed_users) + [request.user.id])
-        ).exclude(user_id__in=blocked_me).order_by("-time_created", "-id").distinct()
+        tickets = (
+            Ticket.objects.filter(user__in=followed_users)
+            .exclude(user_id__in=blocked_me)
+            .exclude(user_id__in=i_blocked)
+            .order_by("-time_created", "-id")
+            .distinct()
+        )
 
     # Optimisations des requêtes
     tickets = (
@@ -57,7 +66,9 @@ def home(request):
 
     # Tickets déjà critiqués par l'utilisateur
     reviewed_ticket_ids = set(
-        Review.objects.filter(user=request.user).values_list("ticket_id", flat=True)
+        Review.objects.filter(user=request.user).values_list(
+            "ticket_id", flat=True
+        )
     )
 
     # Pagination

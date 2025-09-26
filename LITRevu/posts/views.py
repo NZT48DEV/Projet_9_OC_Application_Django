@@ -9,8 +9,8 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-from tickets.models import Ticket
 from reviews.models import Review
+from tickets.models import Ticket
 
 
 @login_required
@@ -32,8 +32,15 @@ def user_posts(request):
     )
 
     # Pagination
-    page_number = request.GET.get("page", 1)
+    page_number = int(request.GET.get("page", 1))
     paginator = Paginator(posts, 5)
+
+    # ✅ Empêche de renvoyer la dernière page en doublon si la page demandée est trop grande
+    if page_number > paginator.num_pages:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"html": "", "has_next": False})
+        page_number = paginator.num_pages  # fallback si on accède directement à une page trop grande
+
     page_obj = paginator.get_page(page_number)
 
     # Requête AJAX → renvoyer uniquement le HTML des posts

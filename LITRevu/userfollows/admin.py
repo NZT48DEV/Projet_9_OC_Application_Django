@@ -4,7 +4,8 @@ Permet de gérer facilement les abonnements et blocages depuis l’interface adm
 """
 
 from django.contrib import admin
-from .models import UserFollows, UserBlock
+
+from .models import UserBlock, UserFollows
 
 
 @admin.register(UserFollows)
@@ -15,6 +16,7 @@ class UserFollowsAdmin(admin.ModelAdmin):
     - Ajoute des filtres et la recherche par username.
     - Trie par date (les plus récents en premier).
     """
+
     list_display = ("user", "followed_user", "created_at")
     search_fields = ("user__username", "followed_user__username")
     list_filter = ("user", "followed_user", "created_at")
@@ -29,6 +31,7 @@ class UserBlockAdmin(admin.ModelAdmin):
     - Ajoute des filtres et la recherche par username.
     - Trie par date (les plus récents en premier).
     """
+
     list_display = ("user", "blocked_user", "created_at")
     search_fields = ("user__username", "blocked_user__username")
     list_filter = ("user", "blocked_user", "created_at")

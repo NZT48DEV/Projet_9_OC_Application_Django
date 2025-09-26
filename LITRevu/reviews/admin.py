@@ -4,6 +4,7 @@ Permet de personnaliser l'affichage et la gestion des critiques dans l'admin.
 """
 
 from django.contrib import admin
+
 from reviews.models import Review
 
 

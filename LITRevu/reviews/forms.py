@@ -4,6 +4,7 @@ Permettent la création et la modification des critiques associées aux tickets.
 """
 
 from django import forms
+
 from .models import Review
 
 
@@ -21,7 +22,7 @@ class ReviewForm(forms.ModelForm):
         widget=forms.RadioSelect,
         required=True,
         label="Note",
-        help_text="Attribuez une note entre 0 et 5"
+        help_text="Attribuez une note entre 0 et 5",
     )
 
     class Meta:

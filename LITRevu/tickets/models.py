@@ -15,6 +15,7 @@ class Ticket(models.Model):
     - Peut concerner un livre ou un article.
     - Chaque ticket peut avoir une image associée (relation OneToOne avec Image).
     """
+
     TYPE_CHOICES = [
         ("", "Choisissez un type"),  # valeur vide affichée en premier
         ("BOOK", "Livre"),
@@ -45,6 +46,7 @@ class Image(models.Model):
     - Chaque ticket peut avoir une seule image.
     - Redimensionne automatiquement l’image sauvegardée à 400x400px max.
     """
+
     image = models.ImageField()
     ticket = models.OneToOneField(
         Ticket,

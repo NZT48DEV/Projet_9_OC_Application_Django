@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('userfollows', '0003_userblock_created_at_alter_userblock_user'),
+        ("userfollows", "0003_userblock_created_at_alter_userblock_user"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userfollows',
-            name='created_at',
+            model_name="userfollows",
+            name="created_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

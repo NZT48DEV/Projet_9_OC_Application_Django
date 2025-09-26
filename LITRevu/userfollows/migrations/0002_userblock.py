@@ -8,22 +8,46 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('userfollows', '0001_initial'),
+        ("userfollows", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserBlock',
+            name="UserBlock",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('blocked_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blocked_by', to=settings.AUTH_USER_MODEL, verbose_name='Utilisateur bloqué')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blocking', to=settings.AUTH_USER_MODEL, verbose_name='Utilisateur')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "blocked_user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="blocked_by",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateur bloqué",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="blocking",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateur",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Blocage',
-                'verbose_name_plural': 'Blocages',
-                'unique_together': {('user', 'blocked_user')},
+                "verbose_name": "Blocage",
+                "verbose_name_plural": "Blocages",
+                "unique_together": {("user", "blocked_user")},
             },
         ),
     ]

@@ -3,7 +3,7 @@ Formulaires pour l'application d'authentification.
 """
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 
 class SignupForm(UserCreationForm):
@@ -28,15 +28,18 @@ class SignupForm(UserCreationForm):
         for field_name in self.fields:
             self.fields[field_name].help_text = None
             self.fields[field_name].label = ""
-            self.fields[field_name].widget.attrs.update({
-                "class": "form-control mx-auto",
-                "style": "max-width: 300px;"
-            })
+            self.fields[field_name].widget.attrs.update(
+                {"class": "form-control mx-auto", "style": "max-width: 300px;"}
+            )
 
         # Ajout des placeholders
-        self.fields["username"].widget.attrs["placeholder"] = "Nom d’utilisateur"
+        self.fields["username"].widget.attrs[
+            "placeholder"
+        ] = "Nom d’utilisateur"
         self.fields["password1"].widget.attrs["placeholder"] = "Mot de passe"
-        self.fields["password2"].widget.attrs["placeholder"] = "Confirmer mot de passe"
+        self.fields["password2"].widget.attrs[
+            "placeholder"
+        ] = "Confirmer mot de passe"
 
 
 class CustomeAuthenticationForm(AuthenticationForm):
@@ -58,11 +61,15 @@ class CustomeAuthenticationForm(AuthenticationForm):
         self.fields["password"].label = ""
 
         # Personnalisation des widgets
-        self.fields["username"].widget.attrs.update({
-            "placeholder": "Nom d’utilisateur",
-            "class": "form-control w-100",
-        })
-        self.fields["password"].widget.attrs.update({
-            "placeholder": "Mot de passe",
-            "class": "form-control w-100",
-        })
+        self.fields["username"].widget.attrs.update(
+            {
+                "placeholder": "Nom d’utilisateur",
+                "class": "form-control w-100",
+            }
+        )
+        self.fields["password"].widget.attrs.update(
+            {
+                "placeholder": "Mot de passe",
+                "class": "form-control w-100",
+            }
+        )

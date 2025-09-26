@@ -1,4 +1,5 @@
 import locale
+
 from django import template
 
 register = template.Library()
@@ -10,6 +11,7 @@ except locale.Error:
     # fallback si la locale n'est pas dispo
     pass
 
+
 @register.filter
 def format_date(value):
     """
@@ -18,6 +20,7 @@ def format_date(value):
     if not value:
         return ""
     return value.strftime("%H:%M, %d %B %Y")  # %B = mois complet
+
 
 @register.filter
 def classname(obj):

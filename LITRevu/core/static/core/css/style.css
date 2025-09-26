@@ -21,11 +21,10 @@ body {
 .review-body.clamp {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4; /* Compatibilité Chrome/Safari */
-    line-clamp: 4;         /* Compatibilité standard */
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    text-align: left;
     max-width: 100%;
 }

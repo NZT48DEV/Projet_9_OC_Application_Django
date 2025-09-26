@@ -48,15 +48,22 @@
 - [x] Uniformiser les partials reviews / ticket
 - [x] Vérifier que le code est bien documenté et qu'il respecte la PEP8 (commentaires, docstrings, etc.)
 - [x] Vérifier `requirements.txt`, `README.md`, etc.
+- [x] Créer des Articles/Livres de tests
+- [x] Rajouter icône du site
+- [x] Embellir le code avec `Flake8` ou `Black`
+- [x] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
 
 ## 🚧 En cours
-- [ ] Embellir le code avec `Flake8` ou `Black`
-- [ ] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
+
+- [ ] Vérifier les livrables 
+- [ ] Déposer les livrables 
+- [ ] Booker la date de soutenance
+
 
 ## 🎯 Pour demain
 
 
-## 🚀 Pour plus tard
+## 🚀 Pour semaine prochaine
 
 - [ ] Rédiger un petit plan de soutenance (15 min présentation + 10 min questions)
 

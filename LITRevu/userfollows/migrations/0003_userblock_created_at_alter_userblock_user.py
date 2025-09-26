@@ -9,19 +9,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('userfollows', '0002_userblock'),
+        ("userfollows", "0002_userblock"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userblock',
-            name='created_at',
+            model_name="userblock",
+            name="created_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='userblock',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blocks', to=settings.AUTH_USER_MODEL, verbose_name='Utilisateur'),
+            model_name="userblock",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="blocks",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Utilisateur",
+            ),
         ),
     ]

@@ -1,5 +1,6 @@
 <div class="text-center mb-3">
-    <h3 id="ticket-title-{{ ticket.id }}" class="fw-bold">{{ ticket.title }}</h3>
+    <!-- Titre -->
+    <h3 id="ticket-title-{{ ticket.id }}" class="fw-bold mb-3">{{ ticket.title }}</h3>
 
     <!-- Image -->
     {% if ticket.image %}
@@ -10,7 +11,8 @@
     {% endif %}
 
     <!-- Description avec limite de lignes -->
-    <div id="ticket-body-{{ ticket.id }}" class="ticket-body text-muted text-center mt-3">
+    <div id="ticket-body-{{ ticket.id }}" 
+         class="ticket-body text-muted mt-3 clamp">
         {{ ticket.description|linebreaksbr }}
     </div>
 

@@ -2,13 +2,13 @@
 Vues pour la gestion des abonnements et blocages utilisateurs.
 """
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import UserFollows, UserBlock
+from .models import UserBlock, UserFollows
 
 User = get_user_model()
 
@@ -26,37 +26,42 @@ def subscriptions(request):
         try:
             user_to_follow = User.objects.get(username=username)
             if user_to_follow == request.user:
-                messages.error(request, "❌ Vous ne pouvez pas vous abonner à vous-même.")
+                messages.error(
+                    request, "❌ Vous ne pouvez pas vous abonner à vous-même."
+                )
             else:
                 UserFollows.objects.get_or_create(
-                    user=request.user,
-                    followed_user=user_to_follow
+                    user=request.user, followed_user=user_to_follow
                 )
                 messages.success(
                     request,
-                    f"✅ Vous êtes abonné à {user_to_follow.username}."
+                    f"✅ Vous êtes abonné à {user_to_follow.username}.",
                 )
         except User.DoesNotExist:
             messages.error(request, "Utilisateur introuvable.")
         return redirect("subscriptions")
 
-    following = UserFollows.objects.filter(
-        user=request.user
-    ).select_related("followed_user")
+    following = UserFollows.objects.filter(user=request.user).select_related(
+        "followed_user"
+    )
 
     followers = UserFollows.objects.filter(
         followed_user=request.user
     ).select_related("user")
 
-    blocked_list = UserBlock.objects.filter(
-        user=request.user
-    ).select_related("blocked_user")
+    blocked_list = UserBlock.objects.filter(user=request.user).select_related(
+        "blocked_user"
+    )
 
-    return render(request, "userfollows/subscriptions.html", {
-        "following": following,
-        "followers": followers,
-        "blocked_list": blocked_list,
-    })
+    return render(
+        request,
+        "userfollows/subscriptions.html",
+        {
+            "following": following,
+            "followers": followers,
+            "blocked_list": blocked_list,
+        },
+    )
 
 
 @login_required
@@ -66,15 +71,14 @@ def unfollow(request, user_id):
     """
     user_to_unfollow = get_object_or_404(User, id=user_id)
     link = UserFollows.objects.filter(
-        user=request.user,
-        followed_user=user_to_unfollow
+        user=request.user, followed_user=user_to_unfollow
     )
 
     if link.exists():
         link.delete()
         messages.success(
             request,
-            f"✅ Vous vous êtes désabonné de {user_to_unfollow.username}."
+            f"✅ Vous vous êtes désabonné de {user_to_unfollow.username}.",
         )
 
     return redirect("subscriptions")
@@ -101,24 +105,20 @@ def search_users(request):
             id=request.user.id
         )
 
+        already_blocked = UserBlock.objects.filter(
+            user=request.user
+        ).values_list("blocked_user_id", flat=True)
+
         if search_type == "follow":
             already_following = UserFollows.objects.filter(
                 user=request.user
             ).values_list("followed_user_id", flat=True)
-
-            already_blocked = UserBlock.objects.filter(
-                user=request.user
-            ).values_list("blocked_user_id", flat=True)
 
             users = users.exclude(id__in=already_following).exclude(
                 id__in=already_blocked
             )
 
         elif search_type == "block":
-            already_blocked = UserBlock.objects.filter(
-                user=request.user
-            ).values_list("blocked_user_id", flat=True)
-
             users = users.exclude(id__in=already_blocked)
 
         results = list(users.values("id", "username")[:5])
@@ -139,8 +139,12 @@ def block_user(request, user_id):
         messages.error(request, "Vous ne pouvez pas vous bloquer vous-même.")
         return redirect("subscriptions")
 
-    UserFollows.objects.filter(user=target, followed_user=request.user).delete()
-    UserFollows.objects.filter(user=request.user, followed_user=target).delete()
+    UserFollows.objects.filter(
+        user=target, followed_user=request.user
+    ).delete()
+    UserFollows.objects.filter(
+        user=request.user, followed_user=target
+    ).delete()
 
     UserBlock.objects.get_or_create(user=request.user, blocked_user=target)
 
@@ -153,7 +157,9 @@ def unblock_user(request, user_id):
     """
     Débloquer un utilisateur.
     """
-    block = get_object_or_404(UserBlock, user=request.user, blocked_user_id=user_id)
+    block = get_object_or_404(
+        UserBlock, user=request.user, blocked_user_id=user_id
+    )
     block.delete()
     messages.success(request, "✅ Utilisateur débloqué avec succès.")
     return redirect("subscriptions")
@@ -171,7 +177,9 @@ def block_user_search(request):
         try:
             user_to_block = User.objects.get(username=username)
             if user_to_block == request.user:
-                messages.error(request, "❌ Vous ne pouvez pas vous bloquer vous-même.")
+                messages.error(
+                    request, "❌ Vous ne pouvez pas vous bloquer vous-même."
+                )
             else:
                 UserFollows.objects.filter(
                     user=user_to_block, followed_user=request.user
@@ -185,8 +193,7 @@ def block_user_search(request):
                     user=request.user, blocked_user=user_to_block
                 )
                 messages.success(
-                    request,
-                    f"🚫 Vous avez bloqué {user_to_block.username}."
+                    request, f"🚫 Vous avez bloqué {user_to_block.username}."
                 )
         except User.DoesNotExist:
             messages.error(request, "Utilisateur introuvable.")

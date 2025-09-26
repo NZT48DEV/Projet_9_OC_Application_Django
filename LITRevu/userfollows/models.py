@@ -34,7 +34,10 @@ class UserFollows(models.Model):
     class Meta:
         verbose_name = "Abonnement"
         verbose_name_plural = "Abonnements"
-        unique_together = ("user", "followed_user")  # Un utilisateur ne peut pas suivre deux fois le même
+        unique_together = (
+            "user",
+            "followed_user",
+        )  # Un utilisateur ne peut pas suivre deux fois le même
 
     def __str__(self):
         """Retourne une représentation lisible de l’abonnement."""

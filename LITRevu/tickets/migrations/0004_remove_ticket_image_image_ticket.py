@@ -7,17 +7,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tickets', '0003_alter_ticket_image'),
+        ("tickets", "0003_alter_ticket_image"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ticket',
-            name='image',
+            model_name="ticket",
+            name="image",
         ),
         migrations.AddField(
-            model_name='image',
-            name='ticket',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='image', to='tickets.ticket'),
+            model_name="image",
+            name="ticket",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="image",
+                to="tickets.ticket",
+            ),
         ),
     ]

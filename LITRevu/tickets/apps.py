@@ -12,6 +12,7 @@ class TicketsConfig(AppConfig):
     - Définit l’auto_field par défaut.
     - Spécifie le nom de l’application et son label lisible.
     """
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "tickets"
     verbose_name = "Tickets"
