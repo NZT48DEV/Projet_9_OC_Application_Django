@@ -202,4 +202,5 @@ L’ensemble du projet a été vérifié et nettoyé, **aucune erreur flake8 res
 ## ✨ Auteur
 
 Projet développé dans le cadre d’un apprentissage Django, à ne pas utiliser en production.
+
 👨‍💻 Inspiré des plateformes de critique comme Twitter/Facebook pour le flux et SensCritique/Goodreads pour les posts.
