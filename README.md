@@ -1,7 +1,7 @@
 # 📚 LITRevu
 
-LITRevu est une application web développée avec **Django** permettant de créer, partager et consulter des **tickets** (demandes de critiques) ainsi que des **critiques** associées.
-Le projet inclut un système d’authentification, d’abonnements entre utilisateurs, et un flux d’actualité avec **scroll infini**.
+LITRevu est une application web développée avec **Django** qui permet aux utilisateurs de créer, partager et consulter des **tickets (demandes de critiques)** ainsi que des **critiques**.
+Elle intègre un système d’authentification, de gestion des abonnements entre utilisateurs et un flux d’actualité avec **défilement infini**.
 
 ---
 
@@ -18,15 +18,14 @@ Voici un aperçu du site en action :
 * **Authentification personnalisée**
 
   * Inscription et connexion sécurisée
-  * Gestion d’un profil avec photo de profil
   * Déconnexion
 
 * **Gestion des tickets et critiques**
 
-  * Créer, modifier et supprimer un ticket
-  * Associer une critique à un ticket existant
-  * Créer une critique avec ou sans ticket
-  * Visualiser tous les détails d’un ticket ou d’une critique
+  * Créer, modifier et supprimer un **ticket** afin de demander une critique à d’autres utilisateurs  
+  * Publier une **critique** en réponse au ticket d’un autre utilisateur
+  * Créer un **ticket accompagné d’une critique** pour partager directement son avis sur un livre ou un article  
+  * Consulter tous les détails d’un **ticket** ou d’une **critique**  
 
 * **Flux d’actualité**
 
@@ -37,17 +36,16 @@ Voici un aperçu du site en action :
 
 * **Abonnements**
 
+  * Recherche avec **autocomplete** pour suivre ou bloquer un utilisateur
   * Suivre un utilisateur
   * Se désabonner
   * Bloquer / Débloquer des utilisateurs
-  * Recherche avec **autocomplete** pour suivre ou bloquer un utilisateur
 
 * **Interface utilisateur**
 
   * Design responsive basé sur **Bootstrap 5**
   * Notifications avec **toasts**
   * Aperçu des images lors de l’upload
-  * Cartes avec ombre et animations
 
 * **Données de test intégrées**
 
@@ -86,11 +84,11 @@ python3 -m venv .env
 source .env/bin/activate
 ```
 
-#### 🔹 Windows (PowerShell)
+#### 🔹 Windows (Bash)
 
-```powershell
+```bash
 python -m venv .env
-.env\Scripts\activate
+source .env/Scripts/activate
 ```
 
 ---
@@ -137,7 +135,7 @@ Par défaut, le site sera disponible sur :
 
 ```
 LITRevu/
-│── authentication/   # Gestion utilisateurs (login/signup, profil)
+│── authentication/   # Gestion utilisateurs (login/signup)
 │── core/             # Fichiers statiques, templates de base
 │── flake8-report/    # Rapport HTML généré par flake8-html
 │── flux/             # Flux principal avec infinite scroll

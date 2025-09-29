@@ -50,7 +50,7 @@ def home(request):
         ).values_list("followed_user", flat=True)
 
         tickets = (
-            Ticket.objects.filter(user__in=followed_users)
+            Ticket.objects.filter(user__in=list(followed_users) + [request.user.id])
             .exclude(user_id__in=blocked_me)
             .exclude(user_id__in=i_blocked)
             .order_by("-time_created", "-id")
