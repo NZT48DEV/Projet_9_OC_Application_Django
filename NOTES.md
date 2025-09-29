@@ -52,25 +52,26 @@
 - [x] Rajouter icône du site
 - [x] Embellir le code avec `Flake8` ou `Black`
 - [x] Vérifier qu'aucune donnée sensible n'est exposée publiquement (secret, clé privée, informations de connexion, etc.)
+- [x] Rajouter la visibilité des posts de l'utilisateur connecté dans son flux.
+- [x] Ajouter la veille sous format PDF.
+- [x] Vérifier les livrables 
+- [x] Déposer les livrables 
+- [x] Booker la date de soutenance
 
 ## 🚧 En cours
-
-- [ ] Vérifier les livrables 
-- [ ] Déposer les livrables 
-- [ ] Booker la date de soutenance
+- [ ] Rédiger un petit plan de soutenance (15 min présentation + 10 min questions)
 
 
 ## 🎯 Pour demain
+- [ ] Mettre a jour mon portfolio et ma veille GitHub
 
 
 ## 🚀 Pour semaine prochaine
 
-- [ ] Rédiger un petit plan de soutenance (15 min présentation + 10 min questions)
-
 
 ## 💡 Pourrait avoir (si temps dispo)
 - [ ] Sessions Django classiques (cookies de session)
-- [ ] Créer la gestion du profil utilisateur (affichage des infos, modification, etc.)
+- [ ] Créer la gestion du profil utilisateur (affichage des infos, photo de profil, modifications, etc.)
 - [ ] Afficher l’indication d’édition sur une critique ou un post et mettre à jour l’heure de dernière modification.
 - [ ] Ajouter un Dark Mode
 
