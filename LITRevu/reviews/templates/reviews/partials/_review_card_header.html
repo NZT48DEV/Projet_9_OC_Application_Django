@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <div class="d-flex justify-content-between mb-3">
     <p class="mb-0 text-muted fst-italic">
         {% if review.user == request.user %}
@@ -7,6 +9,6 @@
         {% endif %}
     </p>
     <small class="text-muted">
-        <i class="bi bi-clock" aria-hidden="true"></i> {{ review.time_created|date:"d/m/Y H:i" }}
+        <i class="bi bi-clock" aria-hidden="true"></i> {{ review.time_created|format_date }}
     </small>
 </div>
