@@ -74,6 +74,7 @@ Voici un aperçu du site en action :
 
 ```bash
 git clone https://github.com/NZT48DEV/Projet_9_OC_Application_Django
+cd Projet_9_OC_Application_Django/
 cd LITRevu
 ```
 
@@ -113,7 +114,15 @@ python manage.py migrate
 
 ---
 
-### 6. Créer un super utilisateur (admin)
+### 6. (Optionnel) Insérer les données de tests
+
+```bash
+python manage.py loaddata data.json
+```
+
+---
+
+### 6bis. (Alternative) Créer un super utilisateur (admin)
 
 ```bash
 python manage.py createsuperuser
