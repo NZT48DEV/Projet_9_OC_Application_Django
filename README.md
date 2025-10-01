@@ -99,15 +99,7 @@ pip install -r requirements.txt
 
 ---
 
-### 5. Préparer la base de données
-
-```bash
-python manage.py migrate
-```
-
----
-
-### 5bis. Configuration des variables d’environnement
+### 5. Configuration des variables d’environnement
 
 Le projet utilise **python-decouple** pour gérer les données sensibles (SECRET_KEY, DEBUG, etc.).
 
@@ -139,7 +131,15 @@ Copiez-collez la clé générée dans le fichier `.env`.
 
 ---
 
-### 6. (Optionnel) Insérer les données de tests
+### 6. Préparer la base de données
+
+```bash
+python manage.py migrate
+```
+
+---
+
+### 7. (Optionnel) Insérer les données de tests
 
 ```bash
 python manage.py loaddata data.json
@@ -147,7 +147,7 @@ python manage.py loaddata data.json
 
 ---
 
-### 6bis. (Alternative) Créer un super utilisateur (admin)
+### 7bis. (Alternative) Créer un super utilisateur (admin)
 
 ```bash
 python manage.py createsuperuser
