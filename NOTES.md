@@ -57,13 +57,14 @@
 - [x] Vérifier les livrables 
 - [x] Déposer les livrables 
 - [x] Booker la date de soutenance
+- [x] Mettre a jour mon portfolio et ma veille GitHub
 
 ## 🚧 En cours
 - [ ] Rédiger un petit plan de soutenance (15 min présentation + 10 min questions)
 
 
 ## 🎯 Pour demain
-- [ ] Mettre a jour mon portfolio et ma veille GitHub
+
 
 
 ## 🚀 Pour semaine prochaine

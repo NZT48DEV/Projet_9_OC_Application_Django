@@ -104,7 +104,6 @@ pip install -r requirements.txt
 ### 5. Préparer la base de données
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
