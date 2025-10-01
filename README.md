@@ -1,6 +1,6 @@
 # 📚 LITRevu
 
-LITRevu est une application web développée avec **Django** qui permet aux utilisateurs de créer, partager et consulter des **tickets (demandes de critiques)** ainsi que des **critiques**.
+LITRevu est une application web développée avec **Django** qui permet aux utilisateurs de créer, partager et consulter des **tickets (demandes de critiques)** ainsi que des **critiques**.  
 Elle intègre un système d’authentification, de gestion des abonnements entre utilisateurs et un flux d’actualité avec **défilement infini**.
 
 ---
@@ -16,43 +16,36 @@ Voici un aperçu du site en action :
 ## 🚀 Fonctionnalités
 
 * **Authentification personnalisée**
-
   * Inscription et connexion sécurisée
   * Déconnexion
 
 * **Gestion des tickets et critiques**
-
   * Créer, modifier et supprimer un **ticket** afin de demander une critique à d’autres utilisateurs  
   * Publier une **critique** en réponse au ticket d’un autre utilisateur
   * Créer un **ticket accompagné d’une critique** pour partager directement son avis sur un livre ou un article  
   * Consulter tous les détails d’un **ticket** ou d’une **critique**  
 
 * **Flux d’actualité**
-
   * Affichage des tickets et critiques dans un flux global
   * Filtrage : *Tous les posts* / *Abonnements uniquement*
   * Pagination avec **scroll infini**
   * Boutons *Voir plus / Voir moins* pour les contenus longs
 
 * **Mes posts**
-
   * Section dédiée pour retrouver l’ensemble de ses propres tickets et critiques publiés
 
 * **Abonnements**
-
   * Recherche avec **autocomplete** pour suivre ou bloquer un utilisateur
   * Suivre un utilisateur
   * Se désabonner
   * Bloquer / Débloquer des utilisateurs
 
 * **Interface utilisateur**
-
   * Design responsive basé sur **Bootstrap 5**
   * Notifications avec **toasts**
   * Aperçu des images lors de l’upload
 
 * **Données de test intégrées**
-
   * La base de données inclut **des items basiques** (tickets et critiques) afin de disposer de données immédiatement utilisables pour tester l’application.
 
 ---
@@ -114,6 +107,38 @@ python manage.py migrate
 
 ---
 
+### 5bis. Configuration des variables d’environnement
+
+Le projet utilise **python-decouple** pour gérer les données sensibles (SECRET_KEY, DEBUG, etc.).
+
+Avant de lancer le projet, créez un fichier `.env` à la racine (au même niveau que `manage.py`) avec le contenu suivant :
+
+```
+SECRET_KEY=votre_cle_django
+DEBUG=True
+```
+
+#### Générer une nouvelle SECRET_KEY
+
+Si vous n’avez pas de clé, vous pouvez en générer une avec la commande suivante :
+
+```bash
+python manage.py shell
+```
+
+Puis dans la console Python :
+
+```python
+from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
+```
+
+Copiez-collez la clé générée dans le fichier `.env`.
+
+⚠️ **Note** : Le fichier `.env` est ignoré par Git afin de ne pas exposer d’informations sensibles publiquement.
+
+---
+
 ### 6. (Optionnel) Insérer les données de tests
 
 ```bash
@@ -138,7 +163,7 @@ Suivez les instructions pour définir un **nom d’utilisateur** et un **mot de 
 python manage.py runserver
 ```
 
-Par défaut, le site sera disponible sur :
+Par défaut, le site sera disponible sur :  
 👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
@@ -172,12 +197,12 @@ LITRevu/
 
 ## ⚙️ Technologies utilisées
 
-* **Backend** : Django 5.2.6 (Python 3.12.1)
-* **Frontend** : Bootstrap 5, JavaScript (vanilla)
-* **Base de données** : SQLite (par défaut, facile à déployer)
-* **Gestion des images** : Pillow (PIL)
-* **Authentification** : système Django custom User
-* **Qualité du code** : Flake8, Black, Isort
+* **Backend** : Django 5.2.6 (Python 3.12.1)  
+* **Frontend** : Bootstrap 5, JavaScript (vanilla)  
+* **Base de données** : SQLite (par défaut, facile à déployer)  
+* **Gestion des images** : Pillow (PIL)  
+* **Authentification** : système Django custom User  
+* **Qualité du code** : Flake8, Black, Isort  
 
 ---
 
@@ -188,19 +213,16 @@ L’ensemble du projet a été vérifié et nettoyé, **aucune erreur flake8 res
 ### Commandes utiles :
 
 * **Flake8** (analyse qualité) :
-
   ```bash
   flake8
   ```
 
 * **Black** (formatage automatique) :
-
   ```bash
   black .
   ```
 
 * **Isort** (tri des imports) :
-
   ```bash
   isort .
   ```
