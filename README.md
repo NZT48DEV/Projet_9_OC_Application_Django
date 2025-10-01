@@ -34,6 +34,10 @@ Voici un aperçu du site en action :
   * Pagination avec **scroll infini**
   * Boutons *Voir plus / Voir moins* pour les contenus longs
 
+* **Mes posts**
+
+  * Section dédiée pour retrouver l’ensemble de ses propres tickets et critiques publiés
+
 * **Abonnements**
 
   * Recherche avec **autocomplete** pour suivre ou bloquer un utilisateur
