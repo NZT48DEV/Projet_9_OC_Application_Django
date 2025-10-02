@@ -86,7 +86,7 @@
 - Recherche avancée (par mots-clés, auteur, date, etc.)
 → Facilite l’accès rapide aux critiques et tickets pertinents.
 
-- Like / Dislike sur les critiques
+- Like sur les critiques
 → Permet de mettre en avant les avis jugés les plus utiles par la communauté.
 
 - Système de notifications (nouvelle critique, nouvel abonné, etc.)
