@@ -29,26 +29,27 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Navigation principale">
         <div class="container-fluid">
-            <div class="row w-100 align-items-center">
-                <div class="col-4 d-flex">
-                    <!-- <a class="nav-link text-warning fw-bold" href="{% url 'admin:index' %}">Admin</a> -->
-                </div>
-                <div class="col-4 text-center">
-                    <a class="navbar-brand" href="{% url 'home' %}" aria-label="Accueil LITRevu">LITRevu</a>
-                </div>
-                <div class="col-4">
-                    {% if user.is_authenticated %}
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav" role="menubar">
-                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'home' %}">Flux</a></li>
-                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'user_posts' %}">Posts</a></li>
-                            <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'subscriptions' %}">Abonnements</a></li>
-                            <li class="nav-item" role="none"><a class="nav-link text-warning fw-bold" role="menuitem" href="{% url 'logout' %}">Se déconnecter</a></li>
-                        </ul>
-                    </div>
-                    {% endif %}
-                </div>
+
+            <!-- Logo / Titre centré -->
+            <a class="navbar-brand mx-auto" href="{% url 'home' %}" aria-label="Accueil LITRevu">LITRevu</a>
+
+            <!-- Bouton hamburger pour petit écran -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            {% if user.is_authenticated %}
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav" role="menubar">
+                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'home' %}">Flux</a></li>
+                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'user_posts' %}">Posts</a></li>
+                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'subscriptions' %}">Abonnements</a></li>
+                    <li class="nav-item" role="none"><a class="nav-link text-warning fw-bold" role="menuitem" href="{% url 'logout' %}">Se déconnecter</a></li>
+                </ul>
             </div>
+            {% endif %}
         </div>
     </nav>
 
