@@ -30,28 +30,33 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Navigation principale">
         <div class="container-fluid">
 
-            <!-- Logo / Titre centré -->
-            <a class="navbar-brand mx-auto" href="{% url 'home' %}" aria-label="Accueil LITRevu">LITRevu</a>
+            <!-- Brand toujours centré et fixé en haut -->
+            <a class="navbar-brand position-absolute start-50" 
+            style="transform: translateX(-50%); top: 0;" 
+            href="{% url 'home' %}" aria-label="Accueil LITRevu">
+            LITRevu
+            </a>
 
-            <!-- Bouton hamburger pour petit écran -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
-              <span class="navbar-toggler-icon"></span>
+            <!-- Bouton hamburger à droite -->
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
+            <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Menu -->
+            <!-- Menu aligné à droite -->
             {% if user.is_authenticated %}
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav" role="menubar">
-                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'home' %}">Flux</a></li>
-                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'user_posts' %}">Posts</a></li>
-                    <li class="nav-item" role="none"><a class="nav-link" role="menuitem" href="{% url 'subscriptions' %}">Abonnements</a></li>
-                    <li class="nav-item" role="none"><a class="nav-link text-warning fw-bold" role="menuitem" href="{% url 'logout' %}">Se déconnecter</a></li>
-                </ul>
+            <ul class="navbar-nav ms-auto text-end" role="menubar">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Flux</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'user_posts' %}">Posts</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'subscriptions' %}">Abonnements</a></li>
+                <li class="nav-item"><a class="nav-link text-warning fw-bold" href="{% url 'logout' %}">Se déconnecter</a></li>
+            </ul>
             </div>
             {% endif %}
         </div>
     </nav>
+
 
     <!-- Zone des messages -->
     <div aria-live="polite" aria-atomic="true" class="position-relative">
