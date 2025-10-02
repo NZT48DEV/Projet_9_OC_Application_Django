@@ -70,10 +70,25 @@
 ## 🚀 Pour semaine prochaine
 
 
-## 💡 Pourrait avoir (si temps dispo)
-- [ ] Sessions Django classiques (cookies de session)
-- [ ] Créer la gestion du profil utilisateur (affichage des infos, photo de profil, modifications, etc.)
-- [ ] Afficher l’indication d’édition sur une critique ou un post et mettre à jour l’heure de dernière modification.
-- [ ] Ajouter un Dark Mode
+## 💡 Améliorations possibles (idées)
+- Sessions Django classiques (cookies de session)
+→ Permet de gérer les connexions des utilisateurs de façon plus sécurisée et fiable, en utilisant les cookies de session standards de Django.
 
+- Gestion du profil utilisateur (affichage des infos, photo de profil, modifications, etc.)
+→ Donne une identité plus complète aux utilisateurs et rend le site plus interactif.
+
+- Indication d’édition sur une critique ou un post + mise à jour de la date de modification
+→ Améliore la transparence et la crédibilité des contenus.
+
+- Dark Mode
+→ Offre une meilleure expérience utilisateur, surtout en conditions de faible luminosité.
+
+- Recherche avancée (par mots-clés, auteur, date, etc.)
+→ Facilite l’accès rapide aux critiques et tickets pertinents.
+
+- Like / Dislike sur les critiques
+→ Permet de mettre en avant les avis jugés les plus utiles par la communauté.
+
+- Système de notifications (nouvelle critique, nouvel abonné, etc.)
+→ Améliore l’engagement des utilisateurs et leur réactivité.
 
