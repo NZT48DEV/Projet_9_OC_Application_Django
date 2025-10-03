@@ -42,3 +42,10 @@ body {
 .navbar {
   min-height: 56px; /* même hauteur que la navbar Bootstrap par défaut */
 }
+
+.navbar-brand-centered {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+}
