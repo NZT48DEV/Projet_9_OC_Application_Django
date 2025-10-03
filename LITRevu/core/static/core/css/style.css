@@ -33,7 +33,12 @@ body {
   color: #856404;       /* texte brun foncé au lieu de jaune */
   border-color: #856404;
 }
+
 .btn-outline-warning:hover {
   background-color: #856404;
   color: #fff;          /* texte blanc sur fond brun */
+}
+
+.navbar {
+  min-height: 56px; /* même hauteur que la navbar Bootstrap par défaut */
 }
